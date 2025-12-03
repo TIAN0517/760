@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{D44F3E50-0063-4554-896E-B4A11B7E5CC8}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>Launcher</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>Create</PrecompiledHeader>
+      <AdditionalIncludeDirectories>../../openssl/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>../../openssl/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>../../openssl/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>../../openssl/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>../../openssl/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>../../openssl/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>../../openssl/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>../../openssl/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\Compress\XUnzip.cpp" />
+    <ClCompile Include="..\Duilib\stb_image.cpp" />
+    <ClCompile Include="..\Duilib\UIActiveX.cpp" />
+    <ClCompile Include="..\Duilib\UIBase.cpp" />
+    <ClCompile Include="..\Duilib\UIButton.cpp" />
+    <ClCompile Include="..\Duilib\UICheckBox.cpp" />
+    <ClCompile Include="..\Duilib\UIChildLayout.cpp" />
+    <ClCompile Include="..\Duilib\UICombo.cpp" />
+    <ClCompile Include="..\Duilib\UIComboBox.cpp" />
+    <ClCompile Include="..\Duilib\UIContainer.cpp" />
+    <ClCompile Include="..\Duilib\UIControl.cpp" />
+    <ClCompile Include="..\Duilib\UIDateTime.cpp" />
+    <ClCompile Include="..\Duilib\UIDelegate.cpp" />
+    <ClCompile Include="..\Duilib\UIDlgBuilder.cpp" />
+    <ClCompile Include="..\Duilib\UIEdit.cpp" />
+    <ClCompile Include="..\Duilib\UIHorizontalLayout.cpp" />
+    <ClCompile Include="..\Duilib\UILabel.cpp" />
+    <ClCompile Include="..\Duilib\UIList.cpp" />
+    <ClCompile Include="..\Duilib\UIManager.cpp" />
+    <ClCompile Include="..\Duilib\UIMarkup.cpp" />
+    <ClCompile Include="..\Duilib\UIOption.cpp" />
+    <ClCompile Include="..\Duilib\UIProgress.cpp" />
+    <ClCompile Include="..\Duilib\UIRender.cpp" />
+    <ClCompile Include="..\Duilib\UIRichEdit.cpp" />
+    <ClCompile Include="..\Duilib\UIScrollBar.cpp" />
+    <ClCompile Include="..\Duilib\UISlider.cpp" />
+    <ClCompile Include="..\Duilib\UITabLayout.cpp" />
+    <ClCompile Include="..\Duilib\UIText.cpp" />
+    <ClCompile Include="..\Duilib\UITileLayout.cpp" />
+    <ClCompile Include="..\Duilib\UITreeView.cpp" />
+    <ClCompile Include="..\Duilib\UIVerticalLayout.cpp" />
+    <ClCompile Include="..\Duilib\UIWebBrowser.cpp" />
+    <ClCompile Include="..\Duilib\Utils.cpp" />
+    <ClCompile Include="..\Duilib\WinImplBase.cpp" />
+    <ClCompile Include="Lineage.cpp" />
+    <ClCompile Include="StdAfx.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Compress\XUnzip.h" />
+    <ClInclude Include="..\Duilib\downloadmgr.h" />
+    <ClInclude Include="..\Duilib\UIActiveX.h" />
+    <ClInclude Include="..\Duilib\UIBase.h" />
+    <ClInclude Include="..\Duilib\UIButton.h" />
+    <ClInclude Include="..\Duilib\UICheckBox.h" />
+    <ClInclude Include="..\Duilib\UIChildLayout.h" />
+    <ClInclude Include="..\Duilib\UICombo.h" />
+    <ClInclude Include="..\Duilib\UIComboBox.h" />
+    <ClInclude Include="..\Duilib\UIContainer.h" />
+    <ClInclude Include="..\Duilib\UIControl.h" />
+    <ClInclude Include="..\Duilib\UIDateTime.h" />
+    <ClInclude Include="..\Duilib\UIDefine.h" />
+    <ClInclude Include="..\Duilib\UIDelegate.h" />
+    <ClInclude Include="..\Duilib\UIDlgBuilder.h" />
+    <ClInclude Include="..\Duilib\UIEdit.h" />
+    <ClInclude Include="..\Duilib\UIHorizontalLayout.h" />
+    <ClInclude Include="..\Duilib\UILabel.h" />
+    <ClInclude Include="..\Duilib\UIList.h" />
+    <ClInclude Include="..\Duilib\UIManager.h" />
+    <ClInclude Include="..\Duilib\UIMarkup.h" />
+    <ClInclude Include="..\Duilib\UIOption.h" />
+    <ClInclude Include="..\Duilib\UIProgress.h" />
+    <ClInclude Include="..\Duilib\UIRender.h" />
+    <ClInclude Include="..\Duilib\UIRichEdit.h" />
+    <ClInclude Include="..\Duilib\UIScrollBar.h" />
+    <ClInclude Include="..\Duilib\UISlider.h" />
+    <ClInclude Include="..\Duilib\UITabLayout.h" />
+    <ClInclude Include="..\Duilib\UIText.h" />
+    <ClInclude Include="..\Duilib\UITileLayout.h" />
+    <ClInclude Include="..\Duilib\UITreeView.h" />
+    <ClInclude Include="..\Duilib\UIVerticalLayout.h" />
+    <ClInclude Include="..\Duilib\UIWebBrowser.h" />
+    <ClInclude Include="..\Duilib\Utils.h" />
+    <ClInclude Include="..\Duilib\WebBrowserEventHandler.h" />
+    <ClInclude Include="..\Duilib\WinImplBase.h" />
+    <ClInclude Include="Lineage.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="StdAfx.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Login.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Login.rc" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

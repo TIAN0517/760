@@ -1,0 +1,115 @@
+﻿	
+	// Version packet intercept - modify S_ServerVersion (opcode 147/0x93 �� 170/0xAA)
+	if (ret > 0 && len >= 50)
+	{
+		unsigned char opcode = static_cast<unsigned char>(buf[0]);
+		if (opcode == 147 || opcode == 0x93 || opcode == 0xAA || opcode == 170)
+		{
+			HookLog("[LauncherDll] Intercepted S_ServerVersion packet (opcode=%u/0x%02X), length=%d", opcode, opcode, ret);
+			
+			// Packet structure:
+			// [0] = opcode (147 or 0xAA)
+			// [1] = check boolean (0=pass, 1=fail)
+			// [2] = status or constant
+			// [3-6] = server version (DWORD)
+			// [7-10] = cache version (DWORD)
+			// [11-14] = auth version (DWORD)
+			// [15-18] = npc version (DWORD)
+			// ... rest of packet
+			
+			// �O�s���A��������T�ѫ���ϥ�
+			static DWORD s_serverVersion = 0;
+			static DWORD s_cacheVersion = 0;
+			static DWORD s_authVersion = 0;
+			static DWORD s_npcVersion = 0;
+			
+			// Make packet compatible with all client versions
+			if (ret >= 19)
+			{
+				// ����������T
+				s_serverVersion = *(DWORD*)&buf[3];
+				s_cacheVersion = *(DWORD*)&buf[7];
+				s_authVersion = *(DWORD*)&buf[11];
+				s_npcVersion = *(DWORD*)&buf[15];
+				
+				HookLog("[LauncherDll] Original packet: check=%d status=%d versions: server=%08X cache=%08X auth=%08X npc=%08X",
+					buf[1], buf[2], s_serverVersion, s_cacheVersion, s_authVersion, s_npcVersion);
+				
+				// �ھڦ��A����x,�Ȥ�ݦ��� status=118 ��|�_�}�s�u
+				// �����ק� buf[2] (status) �� 0,���ܦ��A���i��
+				// buf[1] �O������ (��l��=0,���� check pass)
+				
+				if (buf[2] != 0)
+				{
+					unsigned char oldStatus = buf[2];
+					buf[2] = 0;  // Force server available
+					HookLog("[LauncherDll] CRITICAL: Changed status from %d (0x%02X) to 0 to prevent disconnect", oldStatus, oldStatus);
+				}
+				
+				// ���ק睊����,�O�����A���o�e����l��
+				
+				HookLog("[LauncherDll] After modification: check=%d status=%d (versions unchanged)", buf[1], buf[2]);
+				
+				// ��X�ק�᪺����ʥ]���e������
+				if (ret >= 32)
+				{
+					char hexBuf[256] = {0};
+					int offset = 0;
+				for (int i = 0; i < 32 && i < ret; ++i)
+				{
+					offset += sprintf_s(hexBuf + offset, sizeof(hexBuf) - offset, "%02X ", static_cast<unsigned char>(buf[i]));
+				}
+				HookLog("[LauncherDll] Modified packet (first 32 bytes): %s", hexBuf);
+			}
+			
+			// ����: ���� S_ServerVersion ��۰ʵo�e C_LOGIN (¶�L UI)
+			Sleep(100);  // �u�ȩ���,�T�O�Ȥ�ݳB�z�� S_ServerVersion
+			{
+				HookLog("[LauncherDll] === AUTO SENDING C_LOGIN for testing ===");
+				
+		// C_LOGIN �ʥ]�榡: opcode(52) + account(null-terminated) + password(null-terminated)
+		std::vector<unsigned char> loginPacket;
+		loginPacket.push_back(52);  // C_LOGIN opcode
+		
+		// ���ձb��: "1230" (�H null �������r��)
+		const char* testAccount = "1230";
+		for (int i = 0; i < strlen(testAccount); ++i) {
+			loginPacket.push_back(testAccount[i]);
+		}
+		loginPacket.push_back(0);  // null terminator
+		
+		// ���ձK�X: "1230" (�H null �������r��)
+		const char* testPassword = "1230";
+		for (int i = 0; i < strlen(testPassword); ++i) {
+			loginPacket.push_back(testPassword[i]);
+		}
+		loginPacket.push_back(0);  // null terminator
+		
+		HookLog("[LauncherDll] C_LOGIN packet size before encryption: %d bytes", loginPacket.size());				// �[�K
+				std::vector<unsigned char> encryptedLogin = g_cipherSend.encryptClient(std::move(loginPacket));
+				
+				// �K�[���׫e��
+				size_t totalSize = encryptedLogin.size() + 2;
+				std::vector<unsigned char> finalPacket;
+				finalPacket.push_back(static_cast<unsigned char>(totalSize & 0xFF));
+				finalPacket.push_back(static_cast<unsigned char>((totalSize >> 8) & 0xFF));
+				finalPacket.insert(finalPacket.end(), encryptedLogin.begin(), encryptedLogin.end());
+				
+				HookLog("[LauncherDll] C_LOGIN total packet size with length prefix: %d bytes", finalPacket.size());
+				
+				// �o�e
+				int sendResult = real_send(s, reinterpret_cast<const char*>(finalPacket.data()), 
+					static_cast<int>(finalPacket.size()), 0);
+				
+				if (sendResult > 0) {
+					HookLog("[LauncherDll] ? AUTO C_LOGIN sent successfully: %d bytes", sendResult);
+				} else {
+					HookLog("[LauncherDll] ? AUTO C_LOGIN send failed: error=%d", WSAGetLastError());
+				}
+			}
+			}
+		}
+	}
+
+	// === COMMENTED OUT: S_ServerVersion 改包 + AUTO C_LOGIN (會干擾真實登入) ===
+	/*

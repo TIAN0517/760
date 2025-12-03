@@ -1,0 +1,6 @@
+; HelpTools.def : 聲明 DLL 的模塊參數。
+
+LIBRARY
+
+EXPORTS
+    ; 此處可以是顯式導出

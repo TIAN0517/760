@@ -1,0 +1,1917 @@
+﻿#include "stdafx.h"
+#include "stdafx.h"
+#include "gamehook.h"
+#include "../HelpTools.h"
+#include "../../common/zlib/zlib.h"
+#include "opcodes.h"
+#include "Cipher.h"
+#include <cstring>
+#include <cstdarg>
+#include <cstdio>
+#include <cstdint>
+#include <exception>
+#include <vector>
+#include <wincrypt.h>
+#pragma comment(lib, "advapi32.lib")
+#pragma comment(lib, "version.lib")
+
+#pragma warning(disable:4309)
+
+using namespace gameglobalparam;
+
+static bool g_legacyUiHooksEnabled = false;
+static bool g_versionStateInitialized = false;
+static bool g_cipherInitialized = false;
+static uint32_t g_cipherSeed = 0;
+static Cipher g_cipherSend;
+static SOCKET g_gameSocket = INVALID_SOCKET;  // 追蹤遊戲連線的 socket
+
+static void ResetCipherState()
+{
+	g_cipherInitialized = false;
+	g_cipherSeed = 0;
+	g_cipherSend = Cipher();
+}
+
+// BD file format constants
+#define BD_FILE_SIGNATURE_BYTES "BDk1"
+#define BD_FILE_SIGNATURE_SIZE 4
+#define BD_HEADER_SIZE 40         // 4 (size) + 4 (signature) + 32 (key)
+#define BD_LEGACY_HEADER_SIZE 20  // 4 (size) + 16 (key)
+
+
+//�C�����U�I�X����L�_�l
+HHOOK hhk = NULL;
+HINSTANCE hins = NULL;
+
+//�C���D���f�y�`[����Ω�u�{�ܧ�C���W�r]
+HWND g_hGameMainWnd = NULL;
+//�ڭ̵��f�u�{��H�y�`
+HANDLE g_hWndThread = INVALID_HANDLE_VALUE;
+
+//�ڭ̻��U�����f��H
+extern CMainDialog*   g_pHelpMainDlaog;
+
+
+//�ڭ̤��s�q�T���ƾ�
+SHARE_INFO ShareInfo;
+
+//�ڭ̦ۤv���}���ƾکM�}���ƾڪ���
+BYTE* buffer = NULL;
+DWORD buffer_len = 0;
+static bool g_bdHooksApplied = false;
+//�ڭ̭ק諸�C�����f�W�r
+char szTitle[32];
+
+//�ڭ� �Ω�[�K�q�T���r�`�X
+int _seed = 0;
+int _xorByte = 0;
+
+//RSA�Ѽ�
+BN_CTX* bn_ctx;
+BIGNUM* d;
+BIGNUM* n;
+
+static void ComputeMd5Hex(const unsigned char* data, size_t len, char* out_hex, size_t out_size)
+{
+	if (out_hex == NULL || out_size < 33)
+	{
+		return;
+	}
+
+	HCRYPTPROV hProv = 0;
+	HCRYPTHASH hHash = 0;
+
+	if (!CryptAcquireContextA(&hProv, NULL, NULL, PROV_RSA_FULL, CRYPT_VERIFYCONTEXT))
+	{
+		return;
+	}
+
+	if (CryptCreateHash(hProv, CALG_MD5, 0, 0, &hHash))
+	{
+		if (CryptHashData(hHash, data, static_cast<DWORD>(len), 0))
+		{
+			BYTE digest[16];
+			DWORD digestLen = 16;
+			if (CryptGetHashParam(hHash, HP_HASHVAL, digest, &digestLen, 0))
+			{
+				for (DWORD i = 0; i < digestLen; i++)
+				{
+					sprintf_s(&out_hex[i * 2], out_size - (i * 2), "%02x", digest[i]);
+				}
+				out_hex[32] = '\0';
+			}
+		}
+		CryptDestroyHash(hHash);
+	}
+	CryptReleaseContext(hProv, 0);
+}
+
+#ifdef _DEBUG
+//�o�̩w�q�@�U�D�n�O�Ҥ��nĲ�o�Q���ܼƾگ}�Ѫ����D
+void __dbg_print(const char* fmt, ...)
+{
+	char buffer[8192] = { 0 };
+	va_list args;
+	va_start(args, fmt);
+	vsprintf_s(buffer, fmt, args);
+	va_end(args);
+	OutputDebugStringA(buffer);
+}
+#else
+void __dbg_print(const char* fmt, ...){ ; }
+#endif
+
+#define NAKED __declspec(naked)
+
+static void HookLog(const char* fmt, ...)
+{
+	char buf[512] = { 0 };
+	va_list args;
+	va_start(args, fmt);
+	_vsnprintf_s(buf, sizeof(buf), _TRUNCATE, fmt, args);
+	va_end(args);
+	OutputDebugStringA(buf);
+
+	static HANDLE s_logHandle = INVALID_HANDLE_VALUE;
+	static bool s_logTriedOpen = false;
+	if (!s_logTriedOpen)
+	{
+		char logPath[MAX_PATH] = { 0 };
+		if (GetModuleFileNameA(NULL, logPath, MAX_PATH))
+		{
+			char* slash = strrchr(logPath, '\\');
+			if (slash)
+			{
+				slash[1] = '\0';
+				strncat_s(logPath, "LauncherDll.log", _TRUNCATE);
+				s_logHandle = CreateFileA(logPath, FILE_APPEND_DATA, FILE_SHARE_READ, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+				if (s_logHandle != INVALID_HANDLE_VALUE)
+				{
+					SetFilePointer(s_logHandle, 0, NULL, FILE_END);
+				}
+			}
+		}
+		s_logTriedOpen = true;
+	}
+
+	if (s_logHandle != INVALID_HANDLE_VALUE)
+	{
+		size_t len = strlen(buf);
+		DWORD written = 0;
+		WriteFile(s_logHandle, buf, (DWORD)len, &written, NULL);
+		const char newline[] = "\r\n";
+		WriteFile(s_logHandle, newline, ARRAYSIZE(newline) - 1, &written, NULL);
+	}
+}
+
+static void DetectGameVersion()
+{
+	if (g_versionStateInitialized)
+	{
+		return;
+	}
+	g_versionStateInitialized = true;
+
+	char modulePath[MAX_PATH] = { 0 };
+	if (!GetModuleFileNameA(NULL, modulePath, MAX_PATH))
+	{
+		HookLog("[LauncherDll] DetectGameVersion: GetModuleFileNameA failed (err=%lu)", GetLastError());
+		g_legacyUiHooksEnabled = false;
+		return;
+	}
+
+	DWORD handle = 0;
+	DWORD verSize = GetFileVersionInfoSizeA(modulePath, &handle);
+	if (verSize == 0)
+	{
+		HookLog("[LauncherDll] DetectGameVersion: no version info available (err=%lu)", GetLastError());
+		g_legacyUiHooksEnabled = false;
+		return;
+	}
+
+	std::vector<BYTE> verData(verSize);
+	if (!GetFileVersionInfoA(modulePath, handle, verSize, verData.data()))
+	{
+		HookLog("[LauncherDll] DetectGameVersion: GetFileVersionInfoA failed (err=%lu)", GetLastError());
+		g_legacyUiHooksEnabled = false;
+		return;
+	}
+
+	VS_FIXEDFILEINFO* verInfo = nullptr;
+	UINT verInfoLen = 0;
+	if (!VerQueryValueA(verData.data(), "\\", reinterpret_cast<LPVOID*>(&verInfo), &verInfoLen) || verInfo == nullptr)
+	{
+		HookLog("[LauncherDll] DetectGameVersion: VerQueryValueA failed to retrieve version block");
+		g_legacyUiHooksEnabled = false;
+		return;
+	}
+
+	DWORD major = HIWORD(verInfo->dwFileVersionMS);
+	DWORD minor = LOWORD(verInfo->dwFileVersionMS);
+	DWORD build = HIWORD(verInfo->dwFileVersionLS);
+	DWORD revision = LOWORD(verInfo->dwFileVersionLS);
+	HookLog("[LauncherDll] Game version detected: %lu.%lu.%lu.%lu", major, minor, build, revision);
+
+	if (major < 17)
+	{
+		g_legacyUiHooksEnabled = true;
+		HookLog("[LauncherDll] Legacy UI hooks enabled for this client build");
+	}
+	else
+	{
+		g_legacyUiHooksEnabled = false;
+		HookLog("[LauncherDll] Legacy UI hooks disabled (client >= 17.x)");
+	}
+}
+
+static bool TryInlineHookSafe(ULONG32 address, ULONG32 hookAddr, int inlineLen, const char* tag)
+{
+	__try
+	{
+		InlineHookEx(address, hookAddr, inlineLen);
+		HookLog("[LauncherDll] InlineHookEx succeeded for %s at 0x%08X", tag, address);
+		return true;
+	}
+	__except (EXCEPTION_EXECUTE_HANDLER)
+	{
+		HookLog("[LauncherDll] InlineHookEx FAILED for %s at 0x%08X (exception=0x%08X)", tag, address, GetExceptionCode());
+		return false;
+	}
+}
+
+static bool TryPatchMemorySafe(ULONG32 address, const void* bytes, int len, const char* tag)
+{
+	__try
+	{
+		PatachHook(address, (char*)bytes, len);
+		HookLog("[LauncherDll] Patch succeeded for %s at 0x%08X", tag, address);
+		return true;
+	}
+	__except (EXCEPTION_EXECUTE_HANDLER)
+	{
+		HookLog("[LauncherDll] Patch FAILED for %s at 0x%08X (exception=0x%08X)", tag, address, GetExceptionCode());
+		return false;
+	}
+}
+
+static unsigned char TranslateLegacyClientOpcode(unsigned char opcode)
+{
+	switch (opcode)
+	{
+	case 3:   return C_VERSION;
+	case 21:  return C_EXTENDED_PROTOBUF;
+	case 28:  return C_ONOFF;
+	case 32:  return C_CLIENT_READY;
+	case 48:  return 52;  // C_JOIN_PLEDGE → C_LOGINPACKET (伺服器期望 52)
+	case 49:  return 52;  // C_THROW/C_FISHCLICK → C_LOGINPACKET (客戶端 UI 實際發送)
+	case 64:  return 52;  // C_WHO_PLEDGE → C_LOGINPACKET (備用)
+	case 158: return C_ALIVE;
+	case 163: return C_ENTER_WORLD;
+	case 202: return C_LOGOUT;
+	default:  return opcode;
+	}
+}
+
+static void ApplyOpcodeTranslation(unsigned char* data, size_t length, const char* contextTag)
+{
+	if (data == nullptr || length == 0)
+	{
+		return;
+	}
+
+	unsigned char legacy = data[0];
+	unsigned char translated = TranslateLegacyClientOpcode(legacy);
+	if (translated != legacy)
+	{
+		HookLog("[LauncherDll] translate opcode %u -> %u via %s",
+			static_cast<unsigned int>(legacy),
+			static_cast<unsigned int>(translated),
+			contextTag ? contextTag : "send");
+		data[0] = translated;
+	}
+}
+
+
+//�G���V���౵�f
+NAKED int WINAPI real_connect(SOCKET s, const struct sockaddr *name, int namelen)
+{
+	__asm
+	{
+		mov edi, edi;
+		push ebp;
+		mov ebp, esp;
+		mov eax, connect;
+		add eax, 5;
+		jmp eax;
+	}
+}
+
+NAKED int WINAPI real_send(SOCKET s, const char* buf, int len, int flag)
+{
+	__asm
+	{
+		mov edi, edi;
+		push ebp;
+		mov ebp, esp;
+		mov eax, send;
+		add eax, 5;
+		jmp eax;
+	}
+}
+
+NAKED int WINAPI real_WSASend(SOCKET s,
+	LPWSABUF lpBuffers,
+	DWORD dwBufferCount,
+	LPDWORD lpNumberOfBytesSent,
+	DWORD dwFlags,
+	LPWSAOVERLAPPED lpOverlapped,
+	LPWSAOVERLAPPED_COMPLETION_ROUTINE lpCompletionRoutine)
+{
+	__asm
+	{
+		mov edi, edi;
+		push ebp;
+		mov ebp, esp;
+		mov eax, WSASend;
+		add eax, 5;
+		jmp eax;
+	}
+}
+
+NAKED int WINAPI real_recv(SOCKET s, char* buf, int len, int flag)
+{
+	__asm
+	{
+		mov edi, edi;
+		push ebp;
+		mov ebp, esp;
+		mov eax, recv;
+		add eax, 5;
+		jmp eax;
+	}
+}
+
+NAKED HWND  WINAPI real_CreateWindowEx(DWORD dwExStyle, LPCSTR lpClassName, LPCSTR lpWindowName, DWORD dwStyle, int x, int y, int nWidth, int nHeight, HWND hWndParent, HMENU hMenu, HINSTANCE hInstance, LPVOID lpParam)
+{
+	__asm
+	{
+		mov edi, edi;
+		push ebp;
+		mov ebp, esp;
+		mov eax, CreateWindowEx;
+		add eax, 5;
+		jmp eax;
+	}
+}
+
+
+//========================================================================
+//													�C��4�j�򥻹_�l��o�̵���
+//========================================================================
+
+int  WINAPI my_connect(SOCKET s, const struct sockaddr *name, int namelen)
+{
+	
+	sockaddr_in *addr_in = (sockaddr_in*)name;
+	addr_in->sin_addr.s_addr = inet_addr(ShareInfo.ip);
+	addr_in->sin_port = htons(ShareInfo.port);
+	return real_connect(s, name, namelen);
+}
+
+
+//�ͦ��U�@���H����
+int nextRand()
+{
+	_seed = (214013 * _seed + 2531011) & 0x7FFFFFFF;
+	return (int)(_seed >> 16) & 0xFF;
+}
+
+int  WINAPI my_send(SOCKET s, const char FAR *buf, int len, int flags)
+{
+	int ret;
+	static int s_sendLogCount = 0;
+	if (buf == NULL || len <= 0)
+	{
+		return real_send(s, buf, len, flags);
+	}
+
+	// ===== DUMP 原始封包 (在翻譯和加密之前) =====
+	static int s_rawPacketCount = 0;
+	if (s_rawPacketCount < 20)  // 增加到 20 個封包
+	{
+		// 1. 寫入 binary 文件
+		char dumpFileName[256];
+		sprintf_s(dumpFileName, sizeof(dumpFileName), "raw_packet_%02d_len%d.bin", s_rawPacketCount, len);
+		FILE* rawDump = fopen(dumpFileName, "wb");
+		if (rawDump)
+		{
+			fwrite(buf, 1, len, rawDump);
+			fclose(rawDump);
+		}
+		
+		// 2. 追加到文本文件 login_raw_dump.txt
+		FILE* txtDump = fopen("login_raw_dump.txt", "a");
+		if (txtDump)
+		{
+			fprintf(txtDump, "========== Packet #%d (len=%d) seed=0x%08X cipher_init=%d ==========\n", 
+				s_rawPacketCount, len, g_cipherSeed, g_cipherInitialized ? 1 : 0);
+			
+			// 寫入 hex dump (每行 16 bytes)
+			for (int i = 0; i < len; i += 16)
+			{
+				fprintf(txtDump, "%04X: ", i);
+				
+				// Hex 部分
+				for (int j = 0; j < 16; j++)
+				{
+					if (i + j < len)
+						fprintf(txtDump, "%02X ", (unsigned char)buf[i + j]);
+					else
+						fprintf(txtDump, "   ");
+				}
+				
+				fprintf(txtDump, " | ");
+				
+				// ASCII 部分
+				for (int j = 0; j < 16 && i + j < len; j++)
+				{
+					unsigned char c = (unsigned char)buf[i + j];
+					fprintf(txtDump, "%c", (c >= 32 && c < 127) ? c : '.');
+				}
+				
+				fprintf(txtDump, "\n");
+			}
+			
+			fprintf(txtDump, "\n");
+			fclose(txtDump);
+		}
+		
+		// 3. 日誌顯示前 32 bytes
+		char hexBuf[256] = {0};
+		int hexOffset = 0;
+		int dumpLen = (len > 32) ? 32 : len;
+		for (int i = 0; i < dumpLen; ++i)
+		{
+			hexOffset += sprintf_s(hexBuf + hexOffset, sizeof(hexBuf) - hexOffset, "%02X ", (unsigned char)buf[i]);
+		}
+		
+		HookLog("[LauncherDll] Raw packet #%d dumped (len=%d) seed=0x%08X hex=[%s%s]", 
+			s_rawPacketCount, len, g_cipherSeed, hexBuf, len > 32 ? "..." : "");
+		
+		++s_rawPacketCount;
+	}
+	// ===== END DUMP =====
+
+	unsigned char stackBuffer[4096];
+	unsigned char* workingBuffer = nullptr;
+	std::vector<unsigned char> heapBuffer;
+	const size_t packetSize = static_cast<size_t>(len);
+
+	if (packetSize <= sizeof(stackBuffer))
+	{
+		workingBuffer = stackBuffer;
+	}
+	else
+	{
+		heapBuffer.resize(packetSize);
+		workingBuffer = heapBuffer.data();
+	}
+
+	memcpy(workingBuffer, buf, packetSize);
+	
+	// Log BEFORE opcode translation
+	unsigned char originalOpcode = workingBuffer[0];
+	
+	// 檢查是否包含長度前綴
+	bool hasLengthPrefix = false;
+	int opcodeOffset = 0;  // opcode 的位置
+	if (packetSize >= 3)
+	{
+		uint16_t possibleLength = static_cast<uint16_t>(workingBuffer[0]) | (static_cast<uint16_t>(workingBuffer[1]) << 8);
+		if (possibleLength == packetSize)
+		{
+			hasLengthPrefix = true;
+			opcodeOffset = 2;  // opcode 在長度之後
+			originalOpcode = workingBuffer[2];  // 實際 opcode 在長度之後
+		}
+	}
+	
+	// 增加日誌輸出次數,追蹤所有發送封包
+	if (s_sendLogCount < 50)
+	{
+		char hexBuf[128] = {0};
+		int offset = 0;
+		int dumpLen = (packetSize > 32) ? 32 : packetSize;
+		for (int i = 0; i < dumpLen; ++i)
+		{
+			offset += sprintf_s(hexBuf + offset, sizeof(hexBuf) - offset, "%02X ", static_cast<unsigned char>(workingBuffer[i]));
+		}
+		HookLog("[LauncherDll] my_send #%d: len=%d hasLengthPrefix=%d opcode=%u hex=[%s%s]", 
+			s_sendLogCount, len, hasLengthPrefix ? 1 : 0, 
+			static_cast<unsigned int>(originalOpcode),
+			hexBuf,
+			packetSize > 32 ? "..." : "");
+		++s_sendLogCount;
+	}
+	
+	// 翻譯 opcode (如果有長度前綴,翻譯 workingBuffer[opcodeOffset])
+	ApplyOpcodeTranslation(workingBuffer + opcodeOffset, packetSize - opcodeOffset, "send");
+	
+	// Log AFTER opcode translation
+	unsigned char translatedOpcode = workingBuffer[opcodeOffset];
+	if (originalOpcode != translatedOpcode)
+	{
+		HookLog("[LauncherDll] Opcode translated: %u -> %u", originalOpcode, translatedOpcode);
+	}
+	
+	// Special logging for C_VERSION (opcode 245)
+	if (translatedOpcode == 245)
+	{
+		HookLog("[LauncherDll] *** C_VERSION packet detected! len=%d opcode=%u", len, translatedOpcode);
+	}
+	
+	// 日誌記錄加密狀態
+	HookLog("[LauncherDll] Encryption check: ShareInfo.encrypt=%d g_cipherInitialized=%d", 
+		ShareInfo.encrypt ? 1 : 0, g_cipherInitialized ? 1 : 0);
+	
+	if (ShareInfo.encrypt)
+	{
+		if (!g_cipherInitialized)
+		{
+			HookLog("[LauncherDll] send WITHOUT Cipher: len=%d opcode=%u (seed not initialized)", 
+				len, static_cast<unsigned int>(workingBuffer[0]));
+		}
+		else
+		{
+			// 移除長度前綴後再加密
+			int encryptOffset = hasLengthPrefix ? 2 : 0;
+			int encryptLen = len - encryptOffset;
+			
+			HookLog("[LauncherDll] send WITH Cipher: len=%d opcode=%u hasLengthPrefix=%d encryptLen=%d", 
+				len, static_cast<unsigned int>(workingBuffer[opcodeOffset]), hasLengthPrefix ? 1 : 0, encryptLen);
+			
+			std::vector<uint8_t> plain(workingBuffer + encryptOffset, workingBuffer + len);
+			try
+			{
+				std::vector<uint8_t> encrypted = g_cipherSend.encryptClient(plain);
+				return real_send(s, reinterpret_cast<const char*>(encrypted.data()), static_cast<int>(encrypted.size()), flags);
+			}
+			catch (const std::exception& ex)
+			{
+				HookLog("[LauncherDll] Cipher encryptClient failed: %s", ex.what());
+				return SOCKET_ERROR;
+			}
+		}
+	}
+	ret = real_send(s, reinterpret_cast<const char*>(workingBuffer), len, flags);
+
+	//__dbg_print("real_send len: %d, ret: %d", len, ret);
+
+	return ret;
+}
+
+int WINAPI my_WSASend(
+	SOCKET s,
+	LPWSABUF lpBuffers,
+	DWORD dwBufferCount,
+	LPDWORD lpNumberOfBytesSent,
+	DWORD dwFlags,
+	LPWSAOVERLAPPED lpOverlapped,
+	LPWSAOVERLAPPED_COMPLETION_ROUTINE lpCompletionRoutine)
+{
+	static int s_wsaSendLogCount = 0;
+	if (s_wsaSendLogCount < 5)
+	{
+		DWORD firstLen = 0;
+		unsigned int firstByte = 0;
+		if (lpBuffers != NULL && dwBufferCount > 0 && lpBuffers[0].buf != NULL && lpBuffers[0].len > 0)
+		{
+			firstLen = lpBuffers[0].len;
+			firstByte = static_cast<unsigned int>(static_cast<unsigned char>(lpBuffers[0].buf[0]));
+		}
+		HookLog("[LauncherDll] my_WSASend buffers=%lu firstLen=%lu firstByte=%u", dwBufferCount, firstLen, firstByte);
+		++s_wsaSendLogCount;
+	}
+	if (lpBuffers != NULL && dwBufferCount > 0)
+	{
+		bool opcodeTranslated = false;
+		if (ShareInfo.encrypt && g_cipherInitialized && (lpOverlapped != NULL || lpCompletionRoutine != NULL))
+		{
+			static bool s_warnedOverlappedCipher = false;
+			if (!s_warnedOverlappedCipher)
+			{
+				HookLog("[LauncherDll] WARNING: WSASend in overlapped mode cannot use Cipher bridge; sending plaintext instead.");
+				s_warnedOverlappedCipher = true;
+			}
+		}
+		if (ShareInfo.encrypt && g_cipherInitialized && lpOverlapped == NULL && lpCompletionRoutine == NULL)
+		{
+			size_t totalPlain = 0;
+			for (DWORD i = 0; i < dwBufferCount; ++i)
+			{
+				if (lpBuffers[i].buf != NULL)
+				{
+					totalPlain += lpBuffers[i].len;
+				}
+			}
+			if (totalPlain > 0)
+			{
+				std::vector<uint8_t> plain;
+				plain.reserve(totalPlain);
+				for (DWORD i = 0; i < dwBufferCount; ++i)
+				{
+					LPWSABUF buf = &lpBuffers[i];
+					if (buf == NULL || buf->buf == NULL || buf->len == 0)
+					{
+						continue;
+					}
+
+					unsigned char* bufferBytes = reinterpret_cast<unsigned char*>(buf->buf);
+					unsigned char originalOpcode = bufferBytes[0];
+					
+					if (!opcodeTranslated)
+					{
+						ApplyOpcodeTranslation(bufferBytes, buf->len, "WSASend");
+						opcodeTranslated = true;
+						
+						unsigned char translatedOpcode = bufferBytes[0];
+						if (originalOpcode != translatedOpcode)
+						{
+							HookLog("[LauncherDll] WSASend Opcode translated: %u -> %u", originalOpcode, translatedOpcode);
+						}
+						
+						// Special logging for C_VERSION (opcode 245)
+						if (translatedOpcode == 245)
+						{
+							HookLog("[LauncherDll] *** C_VERSION packet in WSASend! len=%lu opcode=%u", buf->len, translatedOpcode);
+						}
+					}
+					plain.insert(plain.end(), bufferBytes, bufferBytes + buf->len);
+				}
+				try
+				{
+					std::vector<uint8_t> encrypted = g_cipherSend.encryptClient(plain);
+					WSABUF singleBuf;
+					singleBuf.buf = reinterpret_cast<char*>(encrypted.data());
+					singleBuf.len = static_cast<ULONG>(encrypted.size());
+					DWORD tempBytes = 0;
+					LPDWORD bytesPtr = (lpNumberOfBytesSent != NULL) ? lpNumberOfBytesSent : &tempBytes;
+					int sendResult = real_WSASend(s, &singleBuf, 1, bytesPtr, dwFlags, lpOverlapped, lpCompletionRoutine);
+					if (sendResult != SOCKET_ERROR && lpNumberOfBytesSent != NULL)
+					{
+						*lpNumberOfBytesSent = static_cast<DWORD>(encrypted.size());
+					}
+					return sendResult;
+				}
+				catch (const std::exception& ex)
+				{
+					HookLog("[LauncherDll] Cipher encryptClient failed in WSASend: %s", ex.what());
+					return SOCKET_ERROR;
+				}
+			}
+		}
+
+		for (DWORD i = 0; i < dwBufferCount; ++i)
+		{
+			LPWSABUF buf = &lpBuffers[i];
+			if (buf == NULL || buf->buf == NULL || buf->len == 0)
+			{
+				continue;
+			}
+
+			unsigned char* bufferBytes = reinterpret_cast<unsigned char*>(buf->buf);
+			unsigned char originalOpcode = bufferBytes[0];
+			
+			if (!opcodeTranslated)
+			{
+				ApplyOpcodeTranslation(bufferBytes, buf->len, "WSASend-NoEncrypt");
+				opcodeTranslated = true;
+				
+				unsigned char translatedOpcode = bufferBytes[0];
+				if (originalOpcode != translatedOpcode)
+				{
+					HookLog("[LauncherDll] WSASend (no encrypt) Opcode translated: %u -> %u", originalOpcode, translatedOpcode);
+				}
+				
+				// Special logging for C_VERSION (opcode 245)
+				if (translatedOpcode == 245)
+				{
+					HookLog("[LauncherDll] *** C_VERSION packet in WSASend (no encrypt)! len=%lu opcode=%u", buf->len, translatedOpcode);
+				}
+			}
+		}
+	}
+
+	return real_WSASend(s, lpBuffers, dwBufferCount, lpNumberOfBytesSent, dwFlags, lpOverlapped, lpCompletionRoutine);
+}
+
+int  WINAPI my_recv(SOCKET s, char* buf, int len, int flag)
+{
+	int ret;
+	static bool inited = false;
+
+	char buffer[32];
+	if (ShareInfo.encrypt && !inited)
+	{
+		memset(buffer, 0, sizeof(buffer));
+		int len = 0;
+		while (len < 4)
+		{
+			ret = real_recv(s, &buffer[len], 4 - len, 0);
+			if (ret > 0)
+				len += ret;
+			else
+			{
+				if (WSAGetLastError() == WSAEWOULDBLOCK)
+				{
+					continue;
+				}
+				else
+				{
+					return ret;
+				}
+			}
+		}
+
+		unsigned long _authdata = *(unsigned long*)buffer;
+
+		BIGNUM* c = BN_new();
+		BIGNUM* m = BN_new();
+		BN_set_word(c, _authdata);
+		BN_mod_exp(m, c, d, n, bn_ctx);
+
+		if (ShareInfo.randenc)
+			_seed = strtoul(BN_bn2hex(m), NULL, 16);
+		else
+			_xorByte = (unsigned char)strtoul(BN_bn2hex(m), NULL, 16);
+
+		BN_free(c);
+		BN_free(m);
+
+		inited = true;
+		HookLog("[LauncherDll] RSA handshake completed");
+	}
+
+	ret = real_recv(s, buf, len, flag);
+
+	if (ret > 0)
+	{
+		unsigned char opcode = ret > 0 ? static_cast<unsigned char>(buf[0]) : 0;
+		
+		// 增加詳細日誌輸出
+		static int s_recvLogCount = 0;
+		bool shouldLog = (s_recvLogCount < 50) || (opcode == 147) || (opcode == 0x93);
+		
+		if (shouldLog && ret <= 64)
+		{
+			char hexBuf[256] = {0};
+			int offset = 0;
+			for (int i = 0; i < ret && i < 64; ++i)
+			{
+				offset += sprintf_s(hexBuf + offset, sizeof(hexBuf) - offset, "%02X ", static_cast<unsigned char>(buf[i]));
+			}
+			HookLog("[LauncherDll] recv #%d: len=%d opcode=%u hex=[%s] encrypt=%d cipherInit=%d", 
+				s_recvLogCount, ret, opcode, hexBuf,
+				ShareInfo.encrypt ? 1 : 0,
+				g_cipherInitialized ? 1 : 0);
+			s_recvLogCount++;
+		}
+		else if (shouldLog)
+		{
+			HookLog("[LauncherDll] recv #%d: len=%d opcode=%u encrypt=%d cipherInit=%d", 
+				s_recvLogCount, ret, opcode,
+				ShareInfo.encrypt ? 1 : 0,
+				g_cipherInitialized ? 1 : 0);
+			s_recvLogCount++;
+		}
+		
+		// 檢查是否包含長度前綴 (天堂封包格式: 2 bytes length + data)
+		// 如果前兩個字節看起來是長度,並且實際長度匹配,則跳過長度前綴
+		// 這個檢查需要在加密判斷之前進行
+		if (ret >= 3)
+		{
+			uint16_t packetLength = static_cast<uint16_t>(buf[0]) | (static_cast<uint16_t>(buf[1]) << 8);
+			if (packetLength == ret)
+			{
+				// 這個封包包含長度前綴,需要跳過前 2 bytes
+				HookLog("[LauncherDll] Detected length prefix: %u bytes, removing it", packetLength);
+				memmove(buf, buf + 2, ret - 2);
+				ret -= 2;
+				opcode = buf[0];
+				HookLog("[LauncherDll] After removing length prefix: len=%d opcode=%u", ret, opcode);
+			}
+		}
+	}
+
+	if (ret > 0 && ShareInfo.encrypt)
+	{
+		if (!g_cipherInitialized)
+		{
+			unsigned char opcode = static_cast<unsigned char>(buf[0]);
+			HookLog("[LauncherDll] Checking for S_KEY: opcode=%u ret=%d", opcode, ret);
+			
+			// 檢查是否是 S_KEY (opcode=79),需要檢查長度
+			if (ret >= 13)  // S_KEY 封包至少 13 bytes: opcode(1) + seed(4) + payload(8)
+			{
+				if (opcode == 79)
+				{
+					uint32_t seed = static_cast<uint32_t>(static_cast<unsigned char>(buf[1]))
+						| (static_cast<uint32_t>(static_cast<unsigned char>(buf[2])) << 8)
+						| (static_cast<uint32_t>(static_cast<unsigned char>(buf[3])) << 16)
+						| (static_cast<uint32_t>(static_cast<unsigned char>(buf[4])) << 24);
+					HookLog("[LauncherDll] S_KEY packet detected! Raw bytes: %02X %02X %02X %02X %02X, seed=0x%08X", 
+						buf[0], buf[1], buf[2], buf[3], buf[4], seed);
+					g_cipherSend.initKeys(static_cast<int>(seed));
+					g_cipherSeed = seed;
+					g_cipherInitialized = true;
+					g_gameSocket = s;  // 記錄 socket
+					HookLog("[LauncherDll] Cipher initialized with seed from S_KEY: 0x%08X", seed);
+					
+					// 必須發送 C_ServerVersion (opcode=3) 來完成版本驗證
+					// 參考正常登入器的封包格式: 20 bytes
+					// 0000: 03 34 00 b6 03 00 00 00 09 fd 6c d2 a5 cc a1 65
+					// 0010: 02 01 00 00
+					unsigned char versionPacket[20];
+					versionPacket[0] = 3;      // opcode 3 (C_ServerVersion)
+					versionPacket[1] = 0x34;   // 52 (可能是客戶端類型標識)
+					versionPacket[2] = 0x00;
+					versionPacket[3] = 0xb6;   // 182 (客戶端版本標識)
+					versionPacket[4] = 0x03;   // 3
+					versionPacket[5] = 0x00;
+					versionPacket[6] = 0x00;
+					versionPacket[7] = 0x00;
+					versionPacket[8] = 0x09;   // 客戶端 hash/版本資訊
+					versionPacket[9] = 0xfd;
+					versionPacket[10] = 0x6c;
+					versionPacket[11] = 0xd2;
+					versionPacket[12] = 0xa5;  // server version (會被伺服器檢查)
+					versionPacket[13] = 0xcc;
+					versionPacket[14] = 0xa1;
+					versionPacket[15] = 0x65;
+					versionPacket[16] = 0x02;  // 額外資訊
+					versionPacket[17] = 0x01;
+					versionPacket[18] = 0x00;
+					versionPacket[19] = 0x00;
+					
+					HookLog("[LauncherDll] Auto-sending C_ServerVersion packet (opcode=3, len=20) to complete version verification");
+					
+					try
+					{
+						std::vector<uint8_t> plain(versionPacket, versionPacket + 20);
+						std::vector<uint8_t> encrypted = g_cipherSend.encryptClient(plain);
+						
+						// 天堂封包格式: [2 bytes length][encrypted data]
+						// 長度 = 加密後的數據長度 + 2 (長度字段本身)
+						uint16_t totalLength = static_cast<uint16_t>(encrypted.size() + 2);
+						std::vector<uint8_t> packet;
+						packet.push_back(totalLength & 0xFF);         // 長度低位
+						packet.push_back((totalLength >> 8) & 0xFF);  // 長度高位
+						packet.insert(packet.end(), encrypted.begin(), encrypted.end());
+						
+						int sendResult = real_send(s, reinterpret_cast<const char*>(packet.data()), static_cast<int>(packet.size()), 0);
+						if (sendResult > 0)
+						{
+							HookLog("[LauncherDll] C_ServerVersion sent successfully (total=%d bytes: length=2 + encrypted=%zu)", 
+								sendResult, encrypted.size());
+						}
+						else
+						{
+							HookLog("[LauncherDll] Failed to send C_ServerVersion (error=%d)", WSAGetLastError());
+						}
+					}
+					catch (const std::exception& ex)
+					{
+						HookLog("[LauncherDll] Exception sending C_ServerVersion: %s", ex.what());
+					}
+				}
+				else
+				{
+					HookLog("[LauncherDll] Received packet with opcode=%u (not S_KEY=79), len=%d", opcode, ret);
+				}
+			}
+			else
+			{
+				HookLog("[LauncherDll] Received short packet before S_KEY: opcode=%u, len=%d (need >=13 for S_KEY)", opcode, ret);
+			}
+		}
+		else
+		{
+			if (ret >= 4)
+			{
+				HookLog("[LauncherDll] Attempting to decrypt packet: len=%d opcode(encrypted)=%u", ret, static_cast<unsigned char>(buf[0]));
+				try
+				{
+					std::vector<uint8_t> encrypted(reinterpret_cast<uint8_t*>(buf), reinterpret_cast<uint8_t*>(buf) + ret);
+					// 使用 decryptServer 來解密伺服器發送的封包
+					std::vector<uint8_t> plain = g_cipherSend.decryptServer(encrypted);
+					if (plain.size() <= static_cast<size_t>(len))
+					{
+						std::memcpy(buf, plain.data(), plain.size());
+						ret = static_cast<int>(plain.size());
+						unsigned char decryptedOpcode = static_cast<unsigned char>(buf[0]);
+						HookLog("[LauncherDll] Decryption successful: len=%d opcode(decrypted)=%u", ret, decryptedOpcode);
+						
+						// 識別重要的封包類型
+						const char* packetName = nullptr;
+						if (decryptedOpcode == 93) packetName = "S_LoginResult";
+						else if (decryptedOpcode == 84) packetName = "S_CharAmount";
+						else if (decryptedOpcode == 147 || decryptedOpcode == 0x93) packetName = "S_ServerVersion";
+						else if (decryptedOpcode == 79) packetName = "S_KEY";
+						
+						if (packetName != nullptr)
+						{
+							HookLog("[LauncherDll] >>> Received important packet: %s (opcode=%u)", packetName, decryptedOpcode);
+						}
+					}
+					else
+					{
+						HookLog("[LauncherDll] decryptServer returned oversized buffer (%zu > %d)", plain.size(), len);
+						ret = SOCKET_ERROR;
+					}
+				}
+				catch (const std::exception& ex)
+				{
+					HookLog("[LauncherDll] Cipher decryptServer exception: %s", ex.what());
+					ret = SOCKET_ERROR;
+				}
+			}
+			else
+			{
+				HookLog("[LauncherDll] Packet too short for decryption (len=%d)", ret);
+			}
+		}
+	}
+	
+	// Version packet intercept - modify S_ServerVersion (opcode 147/0x93 或 170/0xAA)
+	if (ret > 0 && len >= 50)
+	{
+		unsigned char opcode = static_cast<unsigned char>(buf[0]);
+		if (opcode == 147 || opcode == 0x93 || opcode == 0xAA || opcode == 170)
+		{
+			HookLog("[LauncherDll] Intercepted S_ServerVersion packet (opcode=%u/0x%02X), length=%d", opcode, opcode, ret);
+			
+			// Packet structure:
+			// [0] = opcode (147 or 0xAA)
+			// [1] = check boolean (0=pass, 1=fail)
+			// [2] = status or constant
+			// [3-6] = server version (DWORD)
+			// [7-10] = cache version (DWORD)
+			// [11-14] = auth version (DWORD)
+			// [15-18] = npc version (DWORD)
+			// ... rest of packet
+			
+			// 保存伺服器版本資訊供後續使用
+			static DWORD s_serverVersion = 0;
+			static DWORD s_cacheVersion = 0;
+			static DWORD s_authVersion = 0;
+			static DWORD s_npcVersion = 0;
+			
+			// Make packet compatible with all client versions
+			if (ret >= 19)
+			{
+				// 提取版本資訊
+				s_serverVersion = *(DWORD*)&buf[3];
+				s_cacheVersion = *(DWORD*)&buf[7];
+				s_authVersion = *(DWORD*)&buf[11];
+				s_npcVersion = *(DWORD*)&buf[15];
+				
+				HookLog("[LauncherDll] Original packet: check=%d status=%d versions: server=%08X cache=%08X auth=%08X npc=%08X",
+					buf[1], buf[2], s_serverVersion, s_cacheVersion, s_authVersion, s_npcVersion);
+				
+				// 根據伺服器日誌,客戶端收到 status=118 後會斷開連線
+				// 必須修改 buf[2] (status) 為 0,表示伺服器可用
+				// buf[1] 保持不變 (原始值=0,表示 check pass)
+				
+				if (buf[2] != 0)
+				{
+					unsigned char oldStatus = buf[2];
+					buf[2] = 0;  // Force server available
+					HookLog("[LauncherDll] CRITICAL: Changed status from %d (0x%02X) to 0 to prevent disconnect", oldStatus, oldStatus);
+				}
+				
+				// 不修改版本號,保持伺服器發送的原始值
+				
+				HookLog("[LauncherDll] After modification: check=%d status=%d (versions unchanged)", buf[1], buf[2]);
+				
+				// 輸出修改後的完整封包內容來驗證
+				if (ret >= 32)
+				{
+					char hexBuf[256] = {0};
+					int offset = 0;
+				for (int i = 0; i < 32 && i < ret; ++i)
+				{
+					offset += sprintf_s(hexBuf + offset, sizeof(hexBuf) - offset, "%02X ", static_cast<unsigned char>(buf[i]));
+				}
+				HookLog("[LauncherDll] Modified packet (first 32 bytes): %s", hexBuf);
+			}
+			
+			// 測試: 收到 S_ServerVersion 後自動發送 C_LOGIN (繞過 UI)
+			Sleep(100);  // 短暫延遲,確保客戶端處理完 S_ServerVersion
+			{
+				HookLog("[LauncherDll] === AUTO SENDING C_LOGIN for testing ===");
+				
+		// C_LOGIN 封包格式: opcode(52) + account(null-terminated) + password(null-terminated)
+		std::vector<unsigned char> loginPacket;
+		loginPacket.push_back(52);  // C_LOGIN opcode
+		
+		// 測試帳號: "1230" (以 null 結尾的字串)
+		const char* testAccount = "1230";
+		for (int i = 0; i < strlen(testAccount); ++i) {
+			loginPacket.push_back(testAccount[i]);
+		}
+		loginPacket.push_back(0);  // null terminator
+		
+		// 測試密碼: "1230" (以 null 結尾的字串)
+		const char* testPassword = "1230";
+		for (int i = 0; i < strlen(testPassword); ++i) {
+			loginPacket.push_back(testPassword[i]);
+		}
+		loginPacket.push_back(0);  // null terminator
+		
+		HookLog("[LauncherDll] C_LOGIN packet size before encryption: %d bytes", loginPacket.size());				// 加密
+				std::vector<unsigned char> encryptedLogin = g_cipherSend.encryptClient(std::move(loginPacket));
+				
+				// 添加長度前綴
+				size_t totalSize = encryptedLogin.size() + 2;
+				std::vector<unsigned char> finalPacket;
+				finalPacket.push_back(static_cast<unsigned char>(totalSize & 0xFF));
+				finalPacket.push_back(static_cast<unsigned char>((totalSize >> 8) & 0xFF));
+				finalPacket.insert(finalPacket.end(), encryptedLogin.begin(), encryptedLogin.end());
+				
+				HookLog("[LauncherDll] C_LOGIN total packet size with length prefix: %d bytes", finalPacket.size());
+				
+				// 發送
+				int sendResult = real_send(s, reinterpret_cast<const char*>(finalPacket.data()), 
+					static_cast<int>(finalPacket.size()), 0);
+				
+				if (sendResult > 0) {
+					HookLog("[LauncherDll] ✓ AUTO C_LOGIN sent successfully: %d bytes", sendResult);
+				} else {
+					HookLog("[LauncherDll] ✗ AUTO C_LOGIN send failed: error=%d", WSAGetLastError());
+				}
+			}
+			}
+		}
+	}
+	
+	//__dbg_print("real_recv len: %d ret: %d, %d", len, ret, ret == SOCKET_ERROR ? WSAGetLastError() : 0);
+	return ret;
+}HWND  WINAPI my_CreateWindowEx(DWORD dwExStyle, LPCSTR lpClassName, LPCSTR lpWindowName, DWORD dwStyle, int x, int y, int nWidth, int nHeight, HWND hWndParent, HMENU hMenu, HINSTANCE hInstance, LPVOID lpParam)
+{
+	if (_stricmp(lpClassName, "Lineage") == 0)
+	{
+		char szTitle[32] = { 0 };
+		srand(GetTickCount());
+		const char* str = "abcdefghigklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+		int cnt = 8 + (rand() % 8);
+		for (int i = 0; i < cnt; i++)
+		{
+			szTitle[i] = str[rand() % strlen(str)];
+		}
+		szTitle[cnt] = 0;
+
+		lpWindowName = szTitle;
+
+		//�C�����f��H
+		g_hGameMainWnd = real_CreateWindowEx(dwExStyle, lpClassName, lpWindowName, dwStyle, x, y, nWidth, nHeight, hWndParent, hMenu, hInstance, lpParam);
+
+
+		//�P�_�O�_�ݭn�ϥλ��U
+		if (ShareInfo.usehelper)
+			LoadHelp(g_hGameMainWnd);
+
+
+		return g_hGameMainWnd;
+	}
+
+	//�p�G�O��L���f�A�h***���ޥL
+	return real_CreateWindowEx(dwExStyle, lpClassName, lpWindowName, dwStyle, x, y, nWidth, nHeight, hWndParent, hMenu, hInstance, lpParam);
+}
+
+//�ڭ̥[�����U�����f
+bool LoadHelp(HWND hGameWnd)
+{
+	//�p�G�C�����f�L�ġA�h�}�l������^�Y�i
+	if (!IsWindow(hGameWnd))
+		return false;
+
+	//�o�̧ڭ̶}�l�[���ݩ�ڭ̪��C�����U
+	DWORD GPid = GetWindowThreadProcessId(hGameWnd, NULL);//����i�{ID
+	hhk = SetWindowsHookEx(WH_GETMESSAGE, GetMsgProc, hins, GPid);
+	return true;
+}
+
+//�g�b�ڭ̻��U�����f
+void UnLoadHelp()
+{
+	TRY
+	{
+		//�����ڭ̪��u�{
+		if (g_hWndThread != INVALID_HANDLE_VALUE)
+		TerminateThread(g_hWndThread, -2);
+
+		if (g_pHelpMainDlaog != NULL)
+		{
+			//�p�G�o�ӹ�H���ġA����ڭ̴N�n�O�s�Τ᪺�t�m�H��
+			g_pHelpMainDlaog->SaveUserConfig();
+		}
+
+		if (hhk != NULL)
+			UnhookWindowsHookEx(hhk);
+	}
+		CATCH(CMemoryException, e)
+	{
+		delete e;
+	}
+	END_CATCH
+
+}
+
+BOOL HookIatApi(char* pszDllName, DWORD dwTargetFunction, DWORD dwNewFunction, void** lplpOldFunction)
+{
+	BOOL bFlag = FALSE;
+	BOOL bFind = FALSE;
+
+	if (pszDllName == NULL)
+	{
+		return bFlag;
+	}
+
+	DWORD dwModuleBaseAddress = *(DWORD*)(__readfsdword(0x30) + 0x08);
+	PIMAGE_DOS_HEADER pidh = (PIMAGE_DOS_HEADER)dwModuleBaseAddress; // ���oDOS���Y
+	PIMAGE_NT_HEADERS pinh = (PIMAGE_NT_HEADERS)((DWORD)dwModuleBaseAddress + pidh->e_lfanew); // ���oNT���Y
+	PIMAGE_DATA_DIRECTORY DataDirectory = pinh->OptionalHeader.DataDirectory;
+	PIMAGE_IMPORT_DESCRIPTOR pid = (PIMAGE_IMPORT_DESCRIPTOR)(dwModuleBaseAddress + DataDirectory[IMAGE_DIRECTORY_ENTRY_IMPORT].VirtualAddress); // ���o�ɥX��
+	DWORD dwBackup = NULL;
+	DWORD dwBackupOld = NULL;
+
+	while (pid->Name)
+	{
+		char* pszName = (char*)(pid->Name + dwModuleBaseAddress);
+
+		if (stricmp(pszDllName, pszName) == 0)
+		{
+			bFind = TRUE;
+			break;
+		}
+
+		pid++;
+	}
+
+	if (bFind)
+	{
+		DWORD dwNamePtr = pid->OriginalFirstThunk + dwModuleBaseAddress;
+		DWORD dwFunctionPtr = pid->FirstThunk + dwModuleBaseAddress;
+
+		while (*(DWORD*)dwFunctionPtr)
+		{
+			if (*(DWORD*)dwFunctionPtr == dwTargetFunction)
+			{
+				VirtualProtect((LPVOID)dwFunctionPtr, sizeof(DWORD), PAGE_EXECUTE_READWRITE, &dwBackup); // �Ѱ��O�@
+				*lplpOldFunction = (void*)(*(DWORD*)dwFunctionPtr);
+				*(DWORD*)dwFunctionPtr = dwNewFunction; // �ק�IAT���V���禡�O�����}
+				VirtualProtect((LPVOID)dwFunctionPtr, sizeof(DWORD), dwBackup, &dwBackupOld); // �٭�O�@
+				bFlag = TRUE;
+				break;
+			}
+
+			dwFunctionPtr += 4;
+		}
+	}
+
+	return bFlag;
+}
+
+BOOL HookEatApi(HMODULE hDllModule, DWORD dwTargetFunction, DWORD lpNewFunction, void** lplpOldFunction)
+{
+	BOOL bFlag = FALSE;
+
+	if (!hDllModule)
+	{
+		return bFlag;
+	}
+
+	DWORD dwBackup = NULL;
+	DWORD dwBackupOld = NULL;
+	PIMAGE_DOS_HEADER pidh = (PIMAGE_DOS_HEADER)hDllModule; // ���oDOS���Y
+	PIMAGE_NT_HEADERS pinh = (PIMAGE_NT_HEADERS)((DWORD)pidh + pidh->e_lfanew); // ���oNT���Y
+
+	PIMAGE_DATA_DIRECTORY DataDirectory = pinh->OptionalHeader.DataDirectory;
+	PIMAGE_EXPORT_DIRECTORY pied = (PIMAGE_EXPORT_DIRECTORY)((DWORD)pidh + DataDirectory->VirtualAddress); // ���o�ɥX��
+
+	DWORD* lpFunctionTable = (DWORD*)(pied->AddressOfFunctions + (DWORD)hDllModule);
+
+	for (int i = 0; i < pied->NumberOfFunctions; i++)
+	{
+		DWORD dwFunctionAddr = lpFunctionTable[i] + (DWORD)hDllModule;
+
+		if (dwFunctionAddr == dwTargetFunction)
+		{
+			VirtualProtect(&lpFunctionTable[i], sizeof(DWORD), PAGE_EXECUTE_READWRITE, &dwBackup); // �Ѱ��O�@
+			*lplpOldFunction = (void*)(lpFunctionTable[i] + (DWORD)hDllModule);
+			lpFunctionTable[i] = (lpNewFunction - (DWORD)hDllModule);
+			VirtualProtect(&lpFunctionTable[i], sizeof(DWORD), dwBackup, &dwBackupOld); // �٭�O�@
+			bFlag = TRUE;
+			break;
+		}
+	}
+
+	return bFlag;
+}
+
+UINT WINAPI my_GetACP(void);
+
+typedef ATOM(WINAPI* fn_RegisterClassEx)(__in CONST WNDCLASSEXA *lpWndClassEx);
+fn_RegisterClassEx real_RegisterClassEx = NULL;
+
+typedef UINT(WINAPI* fn_GetACP)(void);
+fn_GetACP real_GetACP = NULL;
+
+BOOL bInitialize = FALSE;
+
+//�~���ɥX���f����
+bool InlineSystemHook(bool bIsHook /*= true*/)
+{
+	if (bIsHook)
+	{
+		ResetCipherState();
+		char szKernel32[] = { 'k', 'e', 'r', 'n', 'e', 'l', '3', '2', '.', 'd', 'l', 'l', '\0' }; // kernel32.dll
+		char szUser32[] = { 'u', 's', 'e', 'r', '3', '2', '.', 'd', 'l', 'l', '\0' }; // user32.dll
+		HMODULE hKernel32 = GetModuleHandle(szKernel32);
+		HMODULE hUser32 = GetModuleHandle(szUser32);
+		HookLog("[LauncherDll] InlineSystemHook attach send=%p WSASend=%p recv=%p", send, WSASend, recv);
+
+		// ���ձq�C�����Ҳձ���X�M��RegisterClassExA���O�����}�A�p�G�ק異�ѫh���ձqUser32.dll���O���餤�ק�EAT����
+		if (!HookIatApi(szKernel32, (DWORD)GetACP, (DWORD)my_GetACP, (void**)&real_GetACP))
+		{
+			HookEatApi(hKernel32, (DWORD)GetACP, (DWORD)my_GetACP, (void**)&real_GetACP);
+		}
+
+		InlineHook((ULONG32)connect, (ULONG32)my_connect, true);
+		InlineHook((ULONG32)send, (ULONG32)my_send, true);
+		InlineHook((ULONG32)WSASend, (ULONG32)my_WSASend, true);
+		InlineHook((ULONG32)recv, (ULONG32)my_recv, true);
+		InlineHook((ULONG32)CreateWindowExA, (ULONG32)my_CreateWindowEx, true);
+	}
+	else
+	{
+		HookLog("[LauncherDll] InlineSystemHook detach send=%p WSASend=%p recv=%p", send, WSASend, recv);
+		InlineHook((ULONG32)connect, (ULONG32)my_connect, false);
+		InlineHook((ULONG32)send, (ULONG32)my_send, false);
+		InlineHook((ULONG32)WSASend, (ULONG32)my_WSASend, false);
+		InlineHook((ULONG32)recv, (ULONG32)my_recv, false);
+		InlineHook((ULONG32)CreateWindowExA, (ULONG32)my_CreateWindowEx, false);
+		ResetCipherState();
+	}
+
+	return true;
+}
+
+//������ƾ�?
+BYTE* GetFileBuffer()
+{
+	FILE* fp = NULL;
+	DWORD len = 0;
+	buffer_len = 0;
+	
+	// HARDCODED: Always use Login.pak from current directory
+	// Ignore ShareInfo.bdfile due to structure alignment issues
+	const wchar_t* paths[] = {
+		L"./Login.pak",
+		L"Login.pak",
+		L"../Login.pak",
+		NULL
+	};
+	
+	for (int i = 0; paths[i] != NULL; i++)
+	{
+		if (_wfopen_s(&fp, paths[i], L"rb") == 0)
+		{
+			HookLog("[LauncherDll] Opened BD file from '%S'\n", paths[i]);
+			break;
+		}
+	}
+	
+	if (fp == NULL)
+	{
+		HookLog("[LauncherDll] Failed to open BD file from any known location\n");
+		return NULL;
+	}
+	
+	fseek(fp, 0, SEEK_END);
+	len = ftell(fp);
+	fseek(fp, 0, SEEK_SET);
+
+	//Ū�ƾ�
+	BYTE* file_data = new BYTE[len];
+	fread(file_data, 1, len, fp);
+	fclose(fp);
+	
+	HookLog("[LauncherDll] Read %d bytes from BD file\n", len);
+
+	DWORD header_len = 0;
+	const BYTE* header_key_ptr = NULL;
+	size_t header_key_len = 0;
+	BYTE* payload = NULL;
+	DWORD payload_len = 0;
+	
+	// Read uncompressed size FIRST (before any decryption)
+	DWORD un_len = *(DWORD*)file_data;
+	HookLog("[LauncherDll] Expected uncompressed size from header: %d bytes\n", un_len);
+	HookLog("[LauncherDll] Raw header bytes (first 32): %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X\n",
+		file_data[0], file_data[1], file_data[2], file_data[3], file_data[4], file_data[5], file_data[6], file_data[7],
+		file_data[8], file_data[9], file_data[10], file_data[11], file_data[12], file_data[13], file_data[14], file_data[15],
+		file_data[16], file_data[17], file_data[18], file_data[19], file_data[20], file_data[21], file_data[22], file_data[23],
+		file_data[24], file_data[25], file_data[26], file_data[27], file_data[28], file_data[29], file_data[30], file_data[31]);
+
+	// Check for new format with BDk1 signature
+	if(len > BD_HEADER_SIZE && memcmp(&file_data[sizeof(DWORD)], BD_FILE_SIGNATURE_BYTES, BD_FILE_SIGNATURE_SIZE) == 0)
+	{
+		header_len = BD_HEADER_SIZE;  // 40 bytes
+		header_key_ptr = &file_data[sizeof(DWORD) + BD_FILE_SIGNATURE_SIZE];
+		header_key_len = BD_HEADER_SIZE - sizeof(DWORD) - BD_FILE_SIGNATURE_SIZE;
+		HookLog("[LauncherDll] New format detected (BDk1 signature)\n");
+		HookLog("[LauncherDll] Header size: %d bytes\n", header_len);
+	}
+	else if(len > BD_LEGACY_HEADER_SIZE)
+	{
+		header_len = BD_LEGACY_HEADER_SIZE;
+		header_key_ptr = &file_data[sizeof(DWORD)];
+		header_key_len = BD_LEGACY_HEADER_SIZE - sizeof(DWORD);
+		HookLog("[LauncherDll] Using legacy format (header_len=%d)\n", header_len);
+	}
+	else
+	{
+		HookLog("[LauncherDll] BD file too small (len=%d)\n", len);
+		delete[]file_data;
+		return NULL;
+	}
+
+	payload = &file_data[header_len];
+	payload_len = len - header_len;
+	HookLog("[LauncherDll] Payload length=%u bytes (total file=%u, header=%u)\n", payload_len, len, header_len);
+
+	if(payload_len == 0)
+	{
+		HookLog("[LauncherDll] Empty payload\n");
+		delete[]file_data;
+		return NULL;
+	}
+	
+	// Save original encrypted payload for potential retry
+	BYTE* encrypted_payload_backup = new BYTE[payload_len];
+	memcpy(encrypted_payload_backup, payload, payload_len);
+
+	bool has_valid_shareinfo_key = false;
+	for (size_t i = 0; i < sizeof(ShareInfo.key); ++i)
+	{
+		if (ShareInfo.key[i] != 0)
+		{
+			has_valid_shareinfo_key = true;
+			HookLog("[LauncherDll] SHARE_INFO key detected (first 16 bytes): %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X\n",
+				ShareInfo.key[0], ShareInfo.key[1], ShareInfo.key[2], ShareInfo.key[3], ShareInfo.key[4], ShareInfo.key[5], ShareInfo.key[6], ShareInfo.key[7],
+				ShareInfo.key[8], ShareInfo.key[9], ShareInfo.key[10], ShareInfo.key[11], ShareInfo.key[12], ShareInfo.key[13], ShareInfo.key[14], ShareInfo.key[15]);
+			break;
+		}
+	}
+
+	auto NormalizeKey = [](BYTE* dst, const BYTE* src, size_t src_len)
+	{
+		memset(dst, 0, 32);
+		if (src == NULL || src_len == 0)
+		{
+			return false;
+		}
+		size_t copy_len = src_len >= 32 ? 32 : src_len;
+		memcpy(dst, src, copy_len);
+		if (copy_len < 32)
+		{
+			for (size_t i = copy_len; i < 32; ++i)
+			{
+				dst[i] = src[i % copy_len];
+			}
+		}
+		return true;
+	};
+
+	auto TryDecryptWithKey = [&](const char* source, const BYTE* raw_key, size_t raw_len) -> bool
+	{
+		if (raw_key == NULL || raw_len == 0)
+		{
+			return false;
+		}
+
+		BYTE normalized_key[32];
+		if (!NormalizeKey(normalized_key, raw_key, raw_len))
+		{
+			return false;
+		}
+
+		memcpy(payload, encrypted_payload_backup, payload_len);
+		HookLog("[LauncherDll] Trying %s key (raw_len=%zu, first 32 bytes): %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X\n",
+			source, raw_len,
+			normalized_key[0], normalized_key[1], normalized_key[2], normalized_key[3], normalized_key[4], normalized_key[5], normalized_key[6], normalized_key[7],
+			normalized_key[8], normalized_key[9], normalized_key[10], normalized_key[11], normalized_key[12], normalized_key[13], normalized_key[14], normalized_key[15],
+			normalized_key[16], normalized_key[17], normalized_key[18], normalized_key[19], normalized_key[20], normalized_key[21], normalized_key[22], normalized_key[23],
+			normalized_key[24], normalized_key[25], normalized_key[26], normalized_key[27], normalized_key[28], normalized_key[29], normalized_key[30], normalized_key[31]);
+
+		// DEBUG: 詳細日誌記錄 XOR 表生成過程
+		HookLog("[LauncherDll] DEBUG: Before config_decrypt, payload first 16 bytes: %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X\n",
+			payload[0], payload[1], payload[2], payload[3], payload[4], payload[5], payload[6], payload[7],
+			payload[8], payload[9], payload[10], payload[11], payload[12], payload[13], payload[14], payload[15]);
+
+		config_decrypt(normalized_key, payload, static_cast<int>(payload_len));
+
+		if (payload_len >= 2 && payload[0] == 0x78 && (payload[1] == 0x9C || payload[1] == 0xDA || payload[1] == 0x01))
+		{
+			HookLog("[LauncherDll] Payload looks like valid zlib data after using %s key\n", source);
+			char md5_buf[64] = { 0 };
+			ComputeMd5Hex(payload, payload_len, md5_buf, sizeof(md5_buf));
+			HookLog("[LauncherDll] Payload MD5 after %s key: %s\n", source, md5_buf);
+			HookLog("[LauncherDll] Payload prefix after %s key: %02X %02X %02X %02X %02X %02X %02X %02X\n",
+				source,
+				payload[0], payload[1], payload[2], payload[3], payload[4], payload[5], payload[6], payload[7]);
+			return true;
+		}
+
+		HookLog("[LauncherDll] Payload still invalid after using %s key (first bytes %02X %02X)\n", source, payload[0], payload[1]);
+		return false;
+	};
+
+	bool decrypted = false;
+	if (header_key_ptr != NULL && header_key_len > 0)
+	{
+		decrypted = TryDecryptWithKey("BD header", header_key_ptr, header_key_len);
+	}
+
+	if (!decrypted && has_valid_shareinfo_key)
+	{
+		decrypted = TryDecryptWithKey("SHARE_INFO", ShareInfo.key, sizeof(ShareInfo.key));
+	}
+
+	if (!decrypted)
+	{
+		decrypted = TryDecryptWithKey("FILE_ENCRYPT_KEY", reinterpret_cast<const BYTE*>(FILE_ENCRYPT_KEY), std::strlen(FILE_ENCRYPT_KEY));
+	}
+
+	if (!decrypted)
+	{
+		HookLog("[LauncherDll] Failed to decrypt BD payload with all known keys\n");
+		delete[] encrypted_payload_backup;
+		delete[]file_data;
+		return NULL;
+	}
+
+	HookLog("[LauncherDll] Payload after decryption (first 32 bytes): %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X\n",
+		payload[0], payload[1], payload[2], payload[3], payload[4], payload[5], payload[6], payload[7],
+		payload[8], payload[9], payload[10], payload[11], payload[12], payload[13], payload[14], payload[15],
+		payload[16], payload[17], payload[18], payload[19], payload[20], payload[21], payload[22], payload[23],
+		payload[24], payload[25], payload[26], payload[27], payload[28], payload[29], payload[30], payload[31]);
+	
+	delete[] encrypted_payload_backup;
+
+	//����
+	BYTE* un_buffer = new BYTE[un_len + 1];
+	HookLog("[LauncherDll] Allocated %d bytes for decompression\n", un_len + 1);
+	int ret = uncompress(un_buffer, &un_len, payload, payload_len);
+	un_buffer[un_len] = 0;
+
+	delete[]file_data;
+
+	if (ret == Z_OK)
+	{
+		HookLog("[LauncherDll] BD decompression successful, final size=%d\n", un_len);
+		buffer_len = un_len;
+		return un_buffer;
+	}
+	
+	HookLog("[LauncherDll] BD decompression failed, error code=%d\n", ret);
+	HookLog("[LauncherDll] Payload snapshot around failure (first 32 bytes): %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X\n",
+		payload[0], payload[1], payload[2], payload[3], payload[4], payload[5], payload[6], payload[7],
+		payload[8], payload[9], payload[10], payload[11], payload[12], payload[13], payload[14], payload[15],
+		payload[16], payload[17], payload[18], payload[19], payload[20], payload[21], payload[22], payload[23],
+		payload[24], payload[25], payload[26], payload[27], payload[28], payload[29], payload[30], payload[31]);
+	delete[]un_buffer;
+	return NULL;
+}
+//�W�[�n�����i�{�������˴� 
+#define ProcessBasicInformation 0
+
+void init()
+{
+	//��l�Ʀ@�ɤ��s�ƾ�
+	SHARE_INFO* pShareInfo = get_shm(GetCurrentProcessId(), false);
+
+	if (pShareInfo)
+	{
+		memcpy(&ShareInfo, pShareInfo, sizeof(SHARE_INFO));
+	}
+
+	ResetCipherState();
+
+	if (ShareInfo.usebd)
+	{
+#ifdef _UNICODE
+		char bdAnsi2[128] = { 0 };
+		WideCharToMultiByte(CP_UTF8, 0, ShareInfo.bdfile, -1, bdAnsi2, sizeof(bdAnsi2) - 1, nullptr, nullptr);
+		HookLog("[LauncherDll] bdfile=%s\n", bdAnsi2);
+#else
+		HookLog("[LauncherDll] bdfile=%s\n", ShareInfo.bdfile);
+#endif
+	}
+
+	if (ShareInfo.encrypt)
+	{
+		bn_ctx = BN_CTX_new();
+		d = BN_new();
+		n = BN_new();
+
+		BN_set_word(d, pShareInfo->RSA_D ^ 32345678);
+		BN_set_word(n, pShareInfo->RSA_N ^ 22345678);
+
+		__dbg_print("d: %s, n: %s, randenc: %d", BN_bn2dec(d), BN_bn2dec(n), pShareInfo->randenc);
+	}
+
+	free_shm();
+
+	// FORCE usebd=0, disable BD buffer for testing standard protocol
+	ShareInfo.usebd = false;
+	HookLog("[LauncherDll] Force usebd=0 (disabled for testing)\n");
+
+	//MessageBox(NULL, _T("�}�l�[���ܨ��ɤ��?!!!"), 0, 0);
+	// 暫時禁用 BD hooks 來測試原始協議
+	bool use_bd_for_test = false;  // 改成 true 啟用 BD hooks
+	
+	if (ShareInfo.usebd && use_bd_for_test)
+	{
+		buffer_len = 0;
+		buffer = GetFileBuffer();
+		if (buffer == NULL || buffer_len == 0)
+		{
+			HookLog("[LauncherDll] BD load failed, but continuing with usebd=1 for basic hooks\n");
+			// DON'T disable usebd - we still want to apply hooks even without BD data
+			// ShareInfo.usebd = false;  // COMMENTED OUT
+			buffer = NULL;
+			buffer_len = 0;
+		}
+		else
+		{
+			HookLog("[LauncherDll] BD buffer loaded, size=%u bytes.\n", buffer_len);
+			
+			// Dump BD buffer to file for analysis
+			FILE* dumpFile = fopen("bd_dump.bin", "wb");
+			if (dumpFile)
+			{
+				size_t written = fwrite(buffer, 1, buffer_len, dumpFile);
+				fclose(dumpFile);
+				HookLog("[LauncherDll] BD buffer dumped to bd_dump.bin (%zu bytes written)\n", written);
+			}
+			else
+			{
+				HookLog("[LauncherDll] Failed to create dump file bd_dump.bin\n");
+			}
+		}
+	}
+	else
+	{
+		buffer = NULL;
+		buffer_len = 0;
+	}
+	g_bdHooksApplied = false;
+
+	encdec_init_key(ShareInfo.key);
+	// Prepare AES_TH adapter with 16-byte key (kept disabled by default)
+	encdec_set_key16(ShareInfo.key);
+
+	//�����ק�t�Ϊ��_�l
+	InlineSystemHook(true);
+}
+
+//�C���_�l(������ƾ�?
+NAKED void GetFileData(void)
+{
+	// 	__asm pushad;
+	// 	MessageBox(NULL,NULL,NULL,NULL);
+	// 	__asm popad;
+	__asm
+	{
+		mov eax, buffer_len;
+		mov[ebp - 0x22C], eax;
+		mov eax, buffer;
+		add eax, 0x1;
+		mov edx, [ebp - 0x20C];
+		mov[edx + 0x8], eax;
+		mov eax, 0x097ABDF;
+		jmp eax;
+	}
+}
+
+const char* pUserName = "cssddddddd";
+
+//�榡�Ʊb���H��
+NAKED void GetUserNameS(void)
+{
+	__asm
+	{
+		// 		push ebp;
+		// 		mov ebp,esp;
+		// 		mov esp,ebp;
+		// 		pop ebp;
+		//����edx�O�s�_��
+		lea edx, [ebp - 0x94];
+		push edx;
+
+		lea ecx, [ebp - 0x80];
+		push ecx;
+		mov ecx, [ebp - 0xB0];
+		mov eax, 0xA544F0;
+		call eax;
+
+		lea edx, [ebp - 0x80];
+		pop eax;		//��edx���Ȱh�^��ڭ�eax�̭���
+		push 0x1F;
+		push 0;
+		push 0;
+		push 0;
+		push 0;
+		push 0;
+		push 0x7F;
+		push edx;
+		push eax;
+		push 0x3E;
+		push pUserName;
+		mov  eax, 0x966060;
+		call	eax;
+		add   esp, 0x2C;
+		mov  eax, 0xD8A071;
+		jmp   eax;
+	}
+}
+
+UINT dwCurHP;
+UINT dwMuseID;
+const char* pPassword = "( -\\\\fRf3%d\\\\fRf> )\\\\fRf=%d";
+char szPassword[MAX_PATH] = { 0 };
+
+void WINAPI PrintfAttack(char* pTextBuff, UINT32 nAttack1, UINT32 nAttack2)
+{
+	wsprintfA(pTextBuff, pPassword, nAttack1, nAttack2);
+}
+
+//�榡�ƱK�X�H��
+NAKED void GetPasswordS(void)
+{
+	__asm
+	{
+		mov[ebp - 0x110], edx;
+		movzx  ecx, word ptr[ebp - 0x2B0];
+		mov[ebp - 0x10C], ecx;
+		mov	   eax, [ebp - 0x110];
+		cmp	  eax, [dwMuseID];
+		jz		  loc_zero;
+		mov[dwCurHP], 0;
+	loc_zero:
+		mov ecx, [dwCurHP];
+		add	ecx, [ebp - 0x10C];
+		mov[dwCurHP], ecx;
+		mov edx, [ebp - 0x110];
+		mov[dwMuseID], edx;
+		mov eax, [dwCurHP];
+		push eax;
+		mov  ecx, [ebp - 0x10C];
+		push ecx;
+		push offset szPassword;
+
+		//lea eax,szPassword;
+		//push eax;
+		call PrintfAttack;
+		/*
+		mov edx,pPassword;
+		push edx;
+		lea eax,szPassword;
+		push eax;
+		call    wsprintfA;
+		add	esp,0x10;
+		*/
+		pushad;
+		push 0;
+		push 0;
+		push 0;
+		push 8;
+		push 0xFFDF;
+		lea ecx, szPassword;
+		push ecx;
+		mov edx, dwMuseID;
+		push edx;
+		mov ebx, 0x74E280;
+		call ebx;
+		add esp, 0x1C;//��̥���?
+
+		popad;
+
+		mov eax, 0x8AB399;
+		jmp eax;
+	}
+}
+
+const char* pPassword2 = "( -\\\\fRf3%d\\\\fRf> )";
+char szPassword2[MAX_PATH] = { 0 };
+
+//�榡�ƱK�X2���f
+NAKED void GetPasswordT(void)
+{
+	memset(szPassword2, 0, MAX_PATH);
+
+	__asm
+	{
+		mov[ebp - 0x110], ecx;
+		mov     ecx, [ebp - 0x1B4];
+		mov     edx, [ecx + 4];
+		mov	   eax, [ebp - 0x1C0];
+		mov     ecx, [edx + eax * 4];
+		mov[ebp - 0x10C], ecx;
+		mov     eax, [ebp - 0x110];
+		push    eax;
+		mov     ecx, pPassword2;
+		push    ecx;
+		push	    0x104;
+		lea       edx, szPassword2;
+		push    edx;
+		call PrintfAttack;
+
+		pushad;
+		push 0;
+		push 0;
+		push 0;
+		push 8;
+		push 0xFFDF;
+		lea		ecx, szPassword2;
+		push     ecx;
+		mov		edx, [ebp - 0x10C];
+		push     edx;
+		mov ebx, 0x74E280;
+		call ebx;
+		add esp, 0x1C;//��̥���?
+		popad;
+
+		mov eax, 0x8A9D9E;
+		jmp  eax;
+	}
+}
+
+//�C�������ɽե�
+NAKED void ChangeHook(void)
+{
+	__asm
+	{
+		pushad;
+		//�o�̧ڭ̭n�Q��k�O�s�ڭ̪��t�ΰt�m
+		call UnLoadHelp;
+		popad;
+
+		mov ebx, 0x0FEF9BC;
+		call ebx;
+
+		mov eax, 0x8F025A;
+		jmp eax;
+	}
+}
+
+UINT WINAPI my_GetACP(void)
+{
+	DWORD dwFunc = NULL;
+	char szShow[MAX_PATH];
+
+	__asm
+	{
+		mov eax, [ebp+04h]
+		mov dwFunc, eax
+	}
+
+	DWORD dwBaseAddress = (DWORD)GetModuleHandle(NULL);
+	DWORD dwCodeEndAddress = NULL;
+	PIMAGE_DOS_HEADER pidh = (PIMAGE_DOS_HEADER)dwBaseAddress;
+	PIMAGE_NT_HEADERS pinh = (PIMAGE_NT_HEADERS)(dwBaseAddress + pidh->e_lfanew);
+
+	dwBaseAddress += pinh->OptionalHeader.BaseOfCode;
+	dwCodeEndAddress = dwBaseAddress + pinh->OptionalHeader.SizeOfCode;
+
+	if ((dwFunc >= dwBaseAddress && dwFunc < dwCodeEndAddress) && !bInitialize)
+	{
+		bInitialize = TRUE;
+
+		//�����O�Ĥ@�B�A�P�_exe�O�_��l�Ƨ���
+		ULONG32 ulInitializeAddr = 0;
+
+		//���U�ӴN�O�C�������_�l�A�ڨS���óð����D����O����_�l ���O�q�����X���ӬO�i�H����������
+		if (g_legacyUiHooksEnabled)
+		{
+			TryInlineHookSafe(0x0D89E32, (ULONG32)GetUserNameS, 6, "GetUserNameS");
+			TryInlineHookSafe(0x08AB26B, (ULONG32)GetPasswordS, 6, "GetPasswordS");
+			TryInlineHookSafe(0x08A9D73, (ULONG32)GetPasswordT, 6, "GetPasswordT");
+		}
+		else
+		{
+			HookLog("[LauncherDll] Skipping legacy inline hooks (GetUserNameS/GetPasswordS/GetPasswordT)");
+		}
+		//InlineHookEx(0x8F0255, (ULONG32)ChangeHook, 5);		//�C���O5�Ӧr�`����
+
+		if (!g_bdHooksApplied)
+		{
+			if (ShareInfo.usebd)
+			{
+				if (buffer && buffer_len)
+				{
+					HookLog("[LauncherDll] applying BD hooks with data (len=%u).\n", buffer_len);
+					const char code2[2] = { 0x90, 0xE9 };
+					if (TryPatchMemorySafe(0x0835A70, code2, sizeof(code2), "BD runtime check (with data)"))
+					{
+						TryInlineHookSafe(0x097AB00, (ULONG32)GetFileData, 5, "GetFileData");
+					}
+				}
+				else
+				{
+					HookLog("[LauncherDll] WARNING: No BD data, but trying to patch runtime check anyway\n");
+					// Try to patch the runtime check even without BD data
+					const char code2[2] = { 0x90, 0xE9 };
+					if (TryPatchMemorySafe(0x0835A70, code2, sizeof(code2), "BD runtime check (no data)"))
+					{
+						HookLog("[LauncherDll] Patched runtime check at 0x835A70\n");
+					}
+				}
+				g_bdHooksApplied = true;
+			}
+			else
+			{
+				HookLog("[LauncherDll] skip BD hooks (usebd=%d buffer=%p len=%u).\n", ShareInfo.usebd ? 1 : 0, buffer, buffer_len);
+			}
+		}
+	}
+
+	return real_GetACP();
+}
+
+void InlineHook(ULONG32 ulOldAddr, ULONG32 ulHookAddr, bool bIsHook/* = true*/)
+{
+	//��l���s���ݩ�
+	DWORD	OrigProtect = 0;
+	//HOOK���O �`�W��jmp ����
+	char   uszHookCode[5] = { 0xE9, 0xCC, 0xCC, 0xCC, 0xCC };
+	//��l���O<�q�L���R�o�{�Ҧ���HOOK����Y�����O�o�ˡA�ڭ̪����Y��HOOK>
+	char uszOrigCode[5] = { 0x8B, 0xFF, 0x55, 0x8B, 0xEC };
+
+	//�ק鷺�s���ݩ�
+	VirtualProtect((LPVOID)ulOldAddr, 5, PAGE_READWRITE, &OrigProtect);
+	if (bIsHook)
+	{
+
+		//�p��HOOK�I  ����:���઺�ؼЦa�} - HOOK ��ƪ���l�a�} - 5 == ��l��Ʀa�}���U�@�����O���a�}
+		(*(PULONG32)&uszHookCode[1]) = ulHookAddr - ulOldAddr - 5;
+		CopyMemory((void*)ulOldAddr, uszHookCode, 5);
+	}
+	else
+	{
+		//��_�@�U��Ӫ��N�i�H�F<�o�̥i��|��í�w�A�]����_���ɭԤ@�w�O�b�{�ǹB�檺�ɭ�>
+		CopyMemory((void*)ulOldAddr, uszOrigCode, 5);
+	}
+
+	//��_���s���ݩ�
+	VirtualProtect((LPVOID)ulOldAddr, 5, OrigProtect, &OrigProtect);
+}
+
+void InlineHookEx(ULONG32 ulOldAddr, ULONG32 ulHookAddr, int nInlineLen)
+{
+	//��l���s���ݩ�
+	DWORD	OrigProtect = 0;
+	//HOOK���O �`�W��jmp ����
+	char   uszHookCode[9] = { 0xE9, 0xCC, 0xCC, 0xCC, 0xCC, 0x90, 0x90, 0x90, 0x90 };
+	//�ק鷺�s���ݩ�
+	VirtualProtect((LPVOID)ulOldAddr, nInlineLen, PAGE_READWRITE, &OrigProtect);
+
+	//�p��HOOK�I  ����:���઺�ؼЦa�} - HOOK ��ƪ���l�a�} - 5 == ��l��Ʀa�}���U�@�����O���a�}
+	(*(PULONG32)&uszHookCode[1]) = ulHookAddr - ulOldAddr - 5;
+	CopyMemory((void*)ulOldAddr, uszHookCode, nInlineLen);
+
+	//��_���s���ݩ�
+	VirtualProtect((LPVOID)ulOldAddr, nInlineLen, OrigProtect, &OrigProtect);
+}
+
+//��ª��ק���O�y�{�A������L�ާ@
+void PatachHook(ULONG32 ulOldAddr, char* pathcode, int npathlen)
+{
+	DWORD dwOldProtect;
+	VirtualProtect((LPVOID)ulOldAddr, npathlen, PAGE_READWRITE, &dwOldProtect);
+	CopyMemory((void*)ulOldAddr, pathcode, npathlen);
+	VirtualProtect((LPVOID)ulOldAddr, npathlen, dwOldProtect, &dwOldProtect);
+}
+
+int WINAPI DLLGetVersion()
+{
+	return 0x1001;
+}
+
+char* WINAPI DLLGetInformation()
+{
+	return "Lin LauncherDll";
+}

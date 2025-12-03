@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window size="800,600" caption="0,0,0,32">
+  <Font name="微軟正黑體" size="12" />
+  <VerticalLayout bkcolor="#FFFFFFFF" bkimage="file='skin/bg.png' corner='0,0,0,0'">
+    <!-- 標題列（名稱需符合程式碼）-->
+    <HorizontalLayout height="32" bkcolor="#FF4A90E2">
+      <Label name="label_caption" text="LinLauncher" padding="10,0,0,0" textcolor="#FFFFFFFF" />
+      <Control />
+  <Button name="btn_min" width="32" height="32" normalimage="skin/min_normal.png" hotimage="skin/min_hot.png" pushedimage="skin/min_down.png" />
+  <Button name="btn_close" width="32" height="32" normalimage="skin/close_normal.png" hotimage="skin/close_hot.png" pushedimage="skin/close_down.png" />
+    </HorizontalLayout>
+
+    <!-- 主要內容區 -->
+    <VerticalLayout padding="20,20,20,20">
+      <Label text="LinLauncher 啟動器" textcolor="#FF333333" />
+      <Control height="10" />
+
+      <!-- 進度顯示（名稱需符合程式碼）-->
+      <Label name="progress_status" text="準備中..." textcolor="#FF666666" />
+      <Control height="6" />
+      <Progress name="progress_cur" height="20" bkcolor="#FFE0E0E0" forecolor="#FF4A90E2" min="0" max="100" value="0" />
+      <Control height="6" />
+      <Progress name="progress_all" height="20" bkcolor="#FFE0E0E0" forecolor="#FF4A90E2" min="0" max="100" value="0" />
+
+      <Control height="10" />
+
+      <!-- 按鈕區（名稱需符合程式碼）-->
+      <HorizontalLayout height="40">
+        <Control />
+  <Button name="btn_start" width="120" height="40" normalimage="skin/btn_start_normal.png" hotimage="skin/btn_start_hot.png" pushedimage="skin/btn_start_down.png" />
+        <Control width="20" />
+  <Button name="btn_exit" width="120" height="40" normalimage="skin/btn_exit_normal.png" hotimage="skin/btn_exit_hot.png" pushedimage="skin/btn_exit_down.png" />
+        <Control />
+      </HorizontalLayout>
+
+      <!-- 供程式碼取得的占位控制項：連結與伺服器按鈕，預設隱藏 -->
+      <HorizontalLayout visible="false">
+        <Button name="btn_link1" />
+        <Button name="btn_link2" />
+        <Button name="btn_link3" />
+        <Button name="btn_link4" />
+        <Button name="btn_link5" />
+      </HorizontalLayout>
+
+      <HorizontalLayout visible="false">
+        <Button name="btn_server1" />
+        <Button name="btn_server2" />
+        <Button name="btn_server3" />
+        <Button name="btn_server4" />
+        <Button name="btn_server5" />
+        <Button name="btn_server6" />
+        <Button name="btn_server7" />
+        <Button name="btn_server8" />
+      </HorizontalLayout>
+
+      <!-- 內建瀏覽器控制（預設隱藏，程式碼會判斷是否顯示）-->
+      <ActiveX name="web" visible="false" />
+    </VerticalLayout>
+  </VerticalLayout>
+</Window>

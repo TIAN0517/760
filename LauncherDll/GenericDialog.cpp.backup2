@@ -1,0 +1,403 @@
+// GenericDialog.cpp : ��{���
+//
+
+#include "stdafx.h"
+#include "HelpTools.h"
+#include "GenericDialog.h"
+#include "afxdialogex.h"
+
+// CGenericDialog ��ܮ�
+
+IMPLEMENT_DYNAMIC(CGenericDialog, CPageDialog)
+
+CGenericDialog::CGenericDialog(CWnd* pParent /*=NULL*/)
+: CPageDialog(CGenericDialog::IDD, pParent)
+{
+
+}
+
+CGenericDialog::~CGenericDialog()
+{
+	::KillTimer(m_hWnd, TIMERID_GENERIC);
+}
+
+void CGenericDialog::DoDataExchange(CDataExchange* pDX)
+{
+	CDialog::DoDataExchange(pDX);
+}
+
+
+BEGIN_MESSAGE_MAP(CGenericDialog, CPageDialog)
+	ON_WM_TIMER()
+	ON_BN_CLICKED(IDC_CHECK1, &CGenericDialog::OnBnClickedCheck1)
+	ON_BN_CLICKED(IDC_CHECK2, &CGenericDialog::OnBnClickedCheck2)
+	ON_BN_CLICKED(IDC_CHECK3, &CGenericDialog::OnBnClickedCheck3)
+	ON_BN_CLICKED(IDC_CHECK4, &CGenericDialog::OnBnClickedCheck4)
+	ON_BN_CLICKED(IDC_CHECK5, &CGenericDialog::OnBnClickedCheck5)
+	ON_BN_CLICKED(IDC_CHECK6, &CGenericDialog::OnBnClickedCheck6)
+	ON_BN_CLICKED(IDC_CHECK7, &CGenericDialog::OnBnClickedCheck7)
+	//ON_BN_CLICKED(IDC_BUTTON5, &CGenericDialog::OnBnClickedButton5)
+	//ON_BN_CLICKED(IDC_BUTTON6, &CGenericDialog::OnBnClickedButton6)
+	//ON_BN_CLICKED(IDC_BUTTON7, &CGenericDialog::OnBnClickedButton7)
+	ON_EN_CHANGE(IDC_EDIT3, &CGenericDialog::OnEnChangeEdit3)
+	ON_BN_CLICKED(IDC_CHECK10, &CGenericDialog::OnBnClickedCheck10)
+	ON_BN_CLICKED(IDC_CHECK9, &CGenericDialog::OnBnClickedCheck9)
+END_MESSAGE_MAP()
+
+
+// CGenericDialog �����B�z�{��
+
+
+void CGenericDialog::OnBnClickedCheck1()
+{
+    if (IsDlgButtonChecked(IDC_CHECK1))
+        SwitchAllDay();
+    else
+        SwitchAllDay(false);
+}
+
+
+void CGenericDialog::OnBnClickedCheck2()
+{
+    if (IsDlgButtonChecked(IDC_CHECK2))
+        SwitchCPU();
+    else
+        SwitchCPU(false);
+}
+
+
+void CGenericDialog::OnBnClickedCheck3()
+{
+    if (IsDlgButtonChecked(IDC_CHECK3))
+        SwitchWater();
+    else
+        SwitchWater(false);
+}
+
+
+void CGenericDialog::OnBnClickedCheck4()
+{
+    if (IsDlgButtonChecked(IDC_CHECK4))
+        SwitchMonsterLevelColor();
+    else
+        SwitchMonsterLevelColor(false);
+}
+
+
+void CGenericDialog::OnBnClickedCheck5()
+{
+    if (IsDlgButtonChecked(IDC_CHECK5))
+        SwitchGameTimer();
+    else
+        SwitchGameTimer(false);
+}
+
+
+void CGenericDialog::OnBnClickedCheck6()
+{
+    if (IsDlgButtonChecked(IDC_CHECK6))
+        SwitchAttackLevelColor();
+    else
+        SwitchAttackLevelColor(false);
+}
+
+
+void CGenericDialog::OnBnClickedCheck7()
+{
+    if (IsDlgButtonChecked(IDC_CHECK7))
+        SwitchRButtonLock();
+    else
+        SwitchRButtonLock(false);
+}
+
+// 自動載入所有功能選項
+void CGenericDialog::LoadUserCheck()
+{
+	OnBnClickedCheck1();
+	OnBnClickedCheck2();
+	OnBnClickedCheck3();
+	OnBnClickedCheck4();
+	OnBnClickedCheck5();
+	OnBnClickedCheck6();
+	OnBnClickedCheck7();
+}
+
+// 定時器處理對話框
+void CGenericDialog::DispatachTimer()
+{
+	static bool bloadCheck = false;
+
+	// 如果遊戲物件還不存在就不要回去執行
+	if (!IsGameInitializeObject() || !QueryCurrentRoleType())
+		return;
+
+	// 如果人物死了，那就不要管我們的事情
+	if (!GetGameRoleHPMP(GAME_ROLE_CURRENTHP) || !GetGameRoleHPMP(GAME_ROLE_CURRENTMP))
+		return;
+
+	// 這裡我們第一次載入，處理一下我們的選項
+	if (!bloadCheck)
+	{
+		bloadCheck = true;
+		LoadUserCheck();
+	}
+
+	// 接下來我們開始處理我們的複選框程式[以下這幾項對話框都沒有寫過，只是先預留的]
+	if (IsDlgButtonChecked(IDC_CHECK9))
+		AutoRepairRoleItem();
+
+	if (IsDlgButtonChecked(IDC_CHECK10))
+		AutoSaturateRole();
+
+	if (IsDlgButtonChecked(IDC_CHECK8))
+		AutoShowExpRole();
+
+}
+
+// 初始化對話框窗口
+void CGenericDialog::InitializeWindow()
+{
+	// 初始化自動修理裝備的物品和飽食度物品
+	char szTempString[MAX_COMBOX_LEN] = { 0 };
+	GetPrivateProfileString(_T("AllRepairItem"), _T("Item0"), _T("\xBF\xEF\xAB\xD7\xB2\x70"), szTempString, MAX_PATH - 1, _T("./LinHelperZ.ini"));
+	m_RepairItemName = szTempString;
+
+	memset(szTempString, 0, MAX_COMBOX_LEN);
+	GetPrivateProfileString(_T("AllSaturateItem"), _T("Item0"), _T("\xA6\xD7"), szTempString, MAX_PATH - 1, _T("./LinHelperZ.ini"));
+	m_SaturateItemName = szTempString;
+
+	// 設置當前定時器處理事情對話框1秒鐘跳一次
+	::SetTimer(m_hWnd, TIMERID_GENERIC, 1000, NULL);
+}
+
+// 自動修理裝備
+void CGenericDialog::AutoRepairRoleItem()
+{
+
+}
+
+// 自動吃肉
+void CGenericDialog::AutoSaturateRole()
+{
+
+}
+
+// 自動顯示經驗
+void CGenericDialog::AutoShowExpRole()
+{
+    SwitchEXPLevelColor();
+}
+//
+//void CGenericDialog::OnBnClickedButton5()
+//{
+//	//  	char szText[MAX_PATH] = {0};
+//	// 	GetDlgItemText(IDC_EDIT3,szText,MAX_PATH);
+//	// 	if(strlen(szText) <= 0)
+//	// 		return;
+//	// 
+//	// 	CallGameFunction(szText);
+//	// 	return;
+//
+//	//�o�̹�¾�~�i��P�w
+//	// 	int nRoleType = GetGameRoleHPMP(GAME_ROLE_CURRENTTYPE);
+//	// 
+//	// 	//����F�M�]�k�v�i��P�w
+//	// 	if((nRoleType & 0xF6) || (nRoleType & 0xD00))
+//	// 	{
+//	// 		TRACE("���e¾�~���]�k�v�Ϊ̺��F%d!\r\n",nRoleType);
+//	// 	}
+//	// 	else
+//	// 	{
+//	// 		TRACE("���e¾�~���D�]�k�v�Ϊ̫D���F%d!\r\n",nRoleType);
+//	// 	}
+//	// 	return;
+//	// 
+//	// 	UseItem(szText);
+//
+//	/*
+//
+//	PITEMPOINT pt = GetItemByName(szText);
+//	if(pt)
+//	{
+//
+//	//	Game_UseItem(pt);
+//	//	Game_UseChangeItem(pt,_T("lv1 skeleton"));
+//
+//	delete pt;
+//	}*/
+//
+//	// 	int nState = _ttoi(szText);
+//	// 	//0x27 == �ڭ��ܨ������A
+//	// 	if(!GetRoleState(nState))
+//	// 		TRACE("���e���A�S���F!\r\n");
+//	// 	else
+//	// 		TRACE("���e���A�w�g�s�b!\r\n");
+//	for (int idx = 0; idx < 0x300; idx++)
+//	{
+//		if (GetRoleState(idx))
+//		{
+//			TRACE("�ոժ��A���\!���Aid:%d!\r\n", idx);
+//			break;
+//		}
+//	}
+//
+//
+//}
+
+//
+//void CGenericDialog::OnBnClickedButton6()
+//{
+//#ifdef DEBUG
+//	char szFileName[MAX_PATH] = { 0 };
+//
+//	TRY
+//	{
+//		//������e����W�r
+//		char* strname = GetCurrentRoleName();
+//		wsprintfA(szFileName, _T("./%sSkill.ini"), strname);
+//
+//		//������e�ޯ�̤j�ƶq
+//		UINT32 nSkillCount = GetSkillCount();
+//		for (int i = 0; i < nSkillCount; i++)
+//		{
+//			PSKILLPOINT pt = GetSkillByIndex(i);
+//			if (pt)
+//			{
+//				TRACE("�ޯ�W��:%s �ޯ�ID:%d �ޯ���w:0x%08X \r\n", pt->strName, pt->ulSkillID, pt->ulIndex);
+//				char szKeyName[32] = { 0 };
+//				wsprintfA(szKeyName, _T("skill%d"), i);
+//				WritePrivateProfileString(_T("RoleAllSkill"), szKeyName, pt->strName, szFileName);
+//				delete pt;
+//			}
+//		}
+//
+//	}
+//		CATCH(CMemoryException, e)
+//	{
+//		delete e;
+//	}
+//	END_CATCH
+//
+//		::MessageBoxA(NULL, _T("�����ޯ�ƾڧ���"), _T("����"), MB_OK);
+//#endif
+//}
+
+
+//void CGenericDialog::OnBnClickedButton7()
+//{
+//#ifdef DEBUG
+//	char szFileName[MAX_PATH] = { 0 };
+//
+//	TRY
+//	{
+//		//������e����W�r
+//		char* strname = GetCurrentRoleName();
+//		wsprintfA(szFileName, _T("./%sItem.ini"), strname);
+//
+//		//������e�ޯ�̤j�ƶq
+//		UINT32 nItemCount = GetItemsCount();
+//		for (int i = 0; i < nItemCount; i++)
+//		{
+//			PITEMPOINT pt = GetItemByIndex(i);
+//			if (pt)
+//			{
+//				TRACE("���~�W��:%s ���~ID:%d ���~���w:0x%08X ���~�ƶq:%d\r\n", pt->strName, pt->ulItemID, pt->ulIndex, pt->ulCount);
+//				char szKeyName[32] = { 0 };
+//				wsprintfA(szKeyName, _T("Item%d"), i);
+//				WritePrivateProfileString(_T("ItemAllItems"), szKeyName, pt->strName, szFileName);
+//				delete pt;
+//			}
+//		}
+//
+//	}
+//		CATCH(CMemoryException, e)
+//	{
+//		delete e;
+//	}
+//	END_CATCH
+//
+//		::MessageBoxA(NULL, _T("�������~�ƾڧ���"), _T("����"), MB_OK);
+//
+//#endif
+//}
+
+// 讀取系統配置對話框>>這個對話框只會使用一次
+void CGenericDialog::ReadUserConfig()
+{
+	UINT ulCheckArray[10] = { 0 };
+
+	// 開始寫入我們的資料內容
+	char szIniPath[MAX_PATH] = { 0 };
+	char* pstrRoleName = GetCurrentRoleName();
+
+	// INI檔路徑 當前目錄/Me(角色名字).ini
+	wsprintfA(szIniPath, _T("./Me%s.ini"), pstrRoleName);
+
+	// 接下來我們開始寫入系統配置
+	int checkCount = (int)(sizeof(ulCheckArray) / sizeof(UINT));
+	int index = 0;
+	while (index < checkCount)
+	{
+		char szKeyName[30] = { 0 };
+		wsprintfA(szKeyName, _T("check%d"), index);
+		ulCheckArray[index] = GetPrivateProfileInt(_T("page1"), szKeyName, 0, szIniPath);
+		// 將我們的選項狀態，從讀取資料來決定是否勾選
+		((CButton*)GetDlgItem(IDC_CHECK1 + index))->SetCheck(ulCheckArray[index]);
+		index++;
+	}
+}
+
+// 寫入系統配置對話框>>這個對話框每一次關閉視窗都會被使用
+void CGenericDialog::WriteUserConfig()
+{
+	UINT ulCheckArray[10] = { 0 };
+	int checkCount = (int)(sizeof(ulCheckArray) / sizeof(UINT));
+	int index = 0;
+	while (index < checkCount)
+	{
+		ulCheckArray[index] = IsDlgButtonChecked(IDC_CHECK1 + index) ? true : false;
+		index++;
+	}
+
+	// 開始寫入我們的資料內容
+	char szIniPath[MAX_PATH] = { 0 };
+	char* pstrRoleName = GetCurrentRoleName();
+
+	// INI檔路徑 當前目錄/Me(角色名字).ini
+	wsprintfA(szIniPath, _T("./Me%s.ini"), pstrRoleName);
+
+	// 接下來我們開始寫入系統配置
+	index = 0;
+	while (index < checkCount)
+	{
+		char szKeyName[30] = { 0 };
+		char szValue[30] = { 0 };
+		wsprintfA(szKeyName, _T("check%d"), index);
+		_itoa_s(ulCheckArray[index], szValue, sizeof(szValue), 10);
+		WritePrivateProfileString(_T("page1"), szKeyName, szValue, szIniPath);
+		index++;
+	}
+
+}
+
+void CGenericDialog::OnEnChangeEdit3()
+{
+	// TODO:  �p�G�o�O RICHEDIT ����A����N���|
+	// �ǰe���i���A���D�z�мg CPageDialog::OnInitDialog()
+	// �禡�M�I�s CRichEditCtrl().SetEventMask()
+	// ���㦳 ENM_CHANGE �X�� ORed �[�J�B�n�C
+
+	// TODO:  �b���[�J����i���B�z�`���{���X
+}
+
+
+void CGenericDialog::OnBnClickedCheck10()
+{
+	// TODO:  �b���[�J����i���B�z�`���{���X
+}
+
+
+void CGenericDialog::OnBnClickedCheck9()
+{
+	// TODO:  �b���[�J����i���B�z�`���{���X
+}

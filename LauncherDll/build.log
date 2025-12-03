@@ -1,0 +1,520 @@
+
+  stdafx.cpp
+  ChangeDialog.cpp
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\ChangeDialog.cpp(78,3): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details. [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/ChangeDialog.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\ChangeDialog.cpp(75,3): warning C4996: 'strncpy': This function or variable may be unsafe. Consider using strncpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details. [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/ChangeDialog.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\ChangeDialog.cpp(233,3): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details. [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/ChangeDialog.cpp')
+  
+  GameMethods.cpp
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\GameMethods.cpp(7,27): warning C4838: 從 'int' 到 'char' 的轉換必須是縮小轉換 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/GameMethods.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\GameMethods.cpp(7,27): warning C4309: '正在初始化': 轉換導致常數值遭截斷; 可能需要使用較大的類型 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/GameMethods.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\GameMethods.cpp(21,27): warning C4838: 從 'int' 到 'char' 的轉換必須是縮小轉換 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/GameMethods.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\GameMethods.cpp(21,27): warning C4309: '正在初始化': 轉換導致常數值遭截斷; 可能需要使用較大的類型 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/GameMethods.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\GameMethods.cpp(28,30): warning C4838: 從 'int' 到 'char' 的轉換必須是縮小轉換 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/GameMethods.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\GameMethods.cpp(28,30): warning C4309: '正在初始化': 轉換導致常數值遭截斷; 可能需要使用較大的類型 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/GameMethods.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\GameMethods.cpp(28,36): warning C4838: 從 'int' 到 'char' 的轉換必須是縮小轉換 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/GameMethods.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\GameMethods.cpp(28,36): warning C4309: '正在初始化': 轉換導致常數值遭截斷; 可能需要使用較大的類型 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/GameMethods.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\GameMethods.cpp(29,25): warning C4838: 從 'int' 到 'char' 的轉換必須是縮小轉換 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/GameMethods.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\GameMethods.cpp(29,25): warning C4309: '正在初始化': 轉換導致常數值遭截斷; 可能需要使用較大的類型 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/GameMethods.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\GameMethods.cpp(29,31): warning C4838: 從 'int' 到 'char' 的轉換必須是縮小轉換 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/GameMethods.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\GameMethods.cpp(29,31): warning C4309: '正在初始化': 轉換導致常數值遭截斷; 可能需要使用較大的類型 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/GameMethods.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\GameMethods.cpp(29,37): warning C4838: 從 'int' 到 'char' 的轉換必須是縮小轉換 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/GameMethods.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\GameMethods.cpp(29,37): warning C4309: '正在初始化': 轉換導致常數值遭截斷; 可能需要使用較大的類型 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/GameMethods.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\GameMethods.cpp(29,43): warning C4838: 從 'int' 到 'char' 的轉換必須是縮小轉換 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/GameMethods.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\GameMethods.cpp(29,43): warning C4309: '正在初始化': 轉換導致常數值遭截斷; 可能需要使用較大的類型 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/GameMethods.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\GameMethods.cpp(29,49): warning C4838: 從 'int' 到 'char' 的轉換必須是縮小轉換 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/GameMethods.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\GameMethods.cpp(29,49): warning C4309: '正在初始化': 轉換導致常數值遭截斷; 可能需要使用較大的類型 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/GameMethods.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\GameMethods.cpp(29,55): warning C4838: 從 'int' 到 'char' 的轉換必須是縮小轉換 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/GameMethods.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\GameMethods.cpp(29,55): warning C4309: '正在初始化': 轉換導致常數值遭截斷; 可能需要使用較大的類型 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/GameMethods.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\GameMethods.cpp(40,30): warning C4838: 從 'int' 到 'char' 的轉換必須是縮小轉換 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/GameMethods.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\GameMethods.cpp(40,30): warning C4309: '正在初始化': 轉換導致常數值遭截斷; 可能需要使用較大的類型 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/GameMethods.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\GameMethods.cpp(40,36): warning C4838: 從 'int' 到 'char' 的轉換必須是縮小轉換 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/GameMethods.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\GameMethods.cpp(40,36): warning C4309: '正在初始化': 轉換導致常數值遭截斷; 可能需要使用較大的類型 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/GameMethods.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\GameMethods.cpp(41,25): warning C4838: 從 'int' 到 'char' 的轉換必須是縮小轉換 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/GameMethods.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\GameMethods.cpp(41,25): warning C4309: '正在初始化': 轉換導致常數值遭截斷; 可能需要使用較大的類型 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/GameMethods.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\GameMethods.cpp(41,31): warning C4838: 從 'int' 到 'char' 的轉換必須是縮小轉換 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/GameMethods.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\GameMethods.cpp(41,31): warning C4309: '正在初始化': 轉換導致常數值遭截斷; 可能需要使用較大的類型 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/GameMethods.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\GameMethods.cpp(41,37): warning C4838: 從 'int' 到 'char' 的轉換必須是縮小轉換 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/GameMethods.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\GameMethods.cpp(41,37): warning C4309: '正在初始化': 轉換導致常數值遭截斷; 可能需要使用較大的類型 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/GameMethods.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\GameMethods.cpp(41,43): warning C4838: 從 'int' 到 'char' 的轉換必須是縮小轉換 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/GameMethods.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\GameMethods.cpp(41,43): warning C4309: '正在初始化': 轉換導致常數值遭截斷; 可能需要使用較大的類型 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/GameMethods.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\GameMethods.cpp(41,49): warning C4838: 從 'int' 到 'char' 的轉換必須是縮小轉換 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/GameMethods.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\GameMethods.cpp(41,49): warning C4309: '正在初始化': 轉換導致常數值遭截斷; 可能需要使用較大的類型 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/GameMethods.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\GameMethods.cpp(41,55): warning C4838: 從 'int' 到 'char' 的轉換必須是縮小轉換 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/GameMethods.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\GameMethods.cpp(41,55): warning C4309: '正在初始化': 轉換導致常數值遭截斷; 可能需要使用較大的類型 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/GameMethods.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\GameMethods.cpp(52,30): warning C4838: 從 'int' 到 'char' 的轉換必須是縮小轉換 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/GameMethods.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\GameMethods.cpp(52,30): warning C4309: '正在初始化': 轉換導致常數值遭截斷; 可能需要使用較大的類型 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/GameMethods.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\GameMethods.cpp(53,25): warning C4838: 從 'int' 到 'char' 的轉換必須是縮小轉換 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/GameMethods.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\GameMethods.cpp(53,25): warning C4309: '正在初始化': 轉換導致常數值遭截斷; 可能需要使用較大的類型 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/GameMethods.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\GameMethods.cpp(53,31): warning C4838: 從 'int' 到 'char' 的轉換必須是縮小轉換 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/GameMethods.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\GameMethods.cpp(53,31): warning C4309: '正在初始化': 轉換導致常數值遭截斷; 可能需要使用較大的類型 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/GameMethods.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\GameMethods.cpp(53,37): warning C4838: 從 'int' 到 'char' 的轉換必須是縮小轉換 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/GameMethods.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\GameMethods.cpp(53,37): warning C4309: '正在初始化': 轉換導致常數值遭截斷; 可能需要使用較大的類型 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/GameMethods.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\GameMethods.cpp(53,43): warning C4838: 從 'int' 到 'char' 的轉換必須是縮小轉換 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/GameMethods.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\GameMethods.cpp(53,43): warning C4309: '正在初始化': 轉換導致常數值遭截斷; 可能需要使用較大的類型 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/GameMethods.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\GameMethods.cpp(53,49): warning C4838: 從 'int' 到 'char' 的轉換必須是縮小轉換 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/GameMethods.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\GameMethods.cpp(53,49): warning C4309: '正在初始化': 轉換導致常數值遭截斷; 可能需要使用較大的類型 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/GameMethods.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\GameMethods.cpp(53,55): warning C4838: 從 'int' 到 'char' 的轉換必須是縮小轉換 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/GameMethods.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\GameMethods.cpp(53,55): warning C4309: '正在初始化': 轉換導致常數值遭截斷; 可能需要使用較大的類型 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/GameMethods.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\GameMethods.cpp(71,27): warning C4838: 從 'int' 到 'char' 的轉換必須是縮小轉換 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/GameMethods.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\GameMethods.cpp(71,27): warning C4309: '正在初始化': 轉換導致常數值遭截斷; 可能需要使用較大的類型 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/GameMethods.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\GameMethods.cpp(646,21): warning C4018: '<': signed/unsigned 不相符 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/GameMethods.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\GameMethods.cpp(655,16): warning C4996: 'memicmp': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _memicmp. See online help for details. [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/GameMethods.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\GameMethods.cpp(704,21): warning C4018: '<': signed/unsigned 不相符 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/GameMethods.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\GameMethods.cpp(856,21): warning C4018: '<': signed/unsigned 不相符 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/GameMethods.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\GameMethods.cpp(1398,24): warning C4996: 'stricmp': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _stricmp. See online help for details. [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/GameMethods.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\GameMethods.cpp(1577,3): warning C4996: 'strncpy': This function or variable may be unsafe. Consider using strncpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details. [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/GameMethods.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\GameMethods.cpp(1684,3): warning C4996: 'strncpy': This function or variable may be unsafe. Consider using strncpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details. [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/GameMethods.cpp')
+  
+  GenericDialog.cpp
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\GenericDialog.cpp(1,1): warning C4819: 檔案含有無法在目前字碼頁 (950) 中表示的字元。請以 Unicode 格式儲存檔案以防止資料遺失 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  HelpTools.cpp
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.cpp(1,1): warning C4819: 檔案含有無法在目前字碼頁 (950) 中表示的字元。請以 Unicode 格式儲存檔案以防止資料遺失 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\hook\debug_log.h(1,1): warning C4819: 檔案含有無法在目前字碼頁 (950) 中表示的字元。請以 Unicode 格式儲存檔案以防止資料遺失 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/HelpTools.cpp')
+  
+  aes.cpp
+  configenc.cpp
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\hook\debug_log.h(1,1): warning C4819: 檔案含有無法在目前字碼頁 (950) 中表示的字元。請以 Unicode 格式儲存檔案以防止資料遺失 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/hook/configenc.cpp')
+  
+  rc6.cpp
+  encdec.cpp
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\CryptoLib\AES_TH.h(15,9): warning C4005: 'GETU32': 巨集重複定義 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/hook/encdec.cpp')
+      D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\hook\aes.h(10,9):
+      參閱 'GETU32' 之前的定義
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\CryptoLib\AES_TH.h(25,9): warning C4005: 'PUTU32': 巨集重複定義 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/hook/encdec.cpp')
+      D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\hook\aes.h(11,9):
+      參閱 'PUTU32' 之前的定義
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\CryptoLib\AES_TH.h(568,1): warning C4819: 檔案含有無法在目前字碼頁 (950) 中表示的字元。請以 Unicode 格式儲存檔案以防止資料遺失 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/hook/encdec.cpp')
+  
+  ExceptionReport.cpp
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\hook\ExceptionReport.cpp(113,43): warning C4566: 由通用字元名稱 '\uFFFD' 表示的字元，無法在目前的字碼頁中表示 (950) [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/hook/ExceptionReport.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\hook\ExceptionReport.cpp(113,43): warning C4566: 由通用字元名稱 '\u0132' 表示的字元，無法在目前的字碼頁中表示 (950) [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/hook/ExceptionReport.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\hook\ExceptionReport.cpp(113,43): warning C4566: 由通用字元名稱 '\u076D' 表示的字元，無法在目前的字碼頁中表示 (950) [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/hook/ExceptionReport.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\hook\ExceptionReport.cpp(113,43): warning C4566: 由通用字元名稱 '\u042B' 表示的字元，無法在目前的字碼頁中表示 (950) [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/hook/ExceptionReport.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\hook\ExceptionReport.cpp(113,43): warning C4566: 由通用字元名稱 '\u0475' 表示的字元，無法在目前的字碼頁中表示 (950) [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/hook/ExceptionReport.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\hook\ExceptionReport.cpp(113,43): warning C4566: 由通用字元名稱 '\u0324' 表示的字元，無法在目前的字碼頁中表示 (950) [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/hook/ExceptionReport.cpp')
+  
+  gamehook.cpp
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\hook\gamehook.cpp(1,1): warning C4819: 檔案含有無法在目前字碼頁 (950) 中表示的字元。請以 Unicode 格式儲存檔案以防止資料遺失 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\hook\opcodes.h(1,1): warning C4819: 檔案含有無法在目前字碼頁 (950) 中表示的字元。請以 Unicode 格式儲存檔案以防止資料遺失 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/hook/gamehook.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\hook\gamehook.cpp(385,29): warning C4996: 'inet_addr': Use inet_pton() or InetPton() instead or define _WINSOCK_DEPRECATED_NO_WARNINGS to disable deprecated API warnings [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/hook/gamehook.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\hook\gamehook.cpp(611,9): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details. [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/hook/gamehook.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\hook\gamehook.cpp(715,9): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details. [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/hook/gamehook.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\hook\gamehook.cpp(786,12): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details. [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/hook/gamehook.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\hook\gamehook.cpp(789,13): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details. [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/hook/gamehook.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\hook\gamehook.cpp(829,12): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details. [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/hook/gamehook.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\hook\gamehook.cpp(832,13): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details. [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/hook/gamehook.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\hook\gamehook.cpp(942,1): warning C4819: 檔案含有無法在目前字碼頁 (950) 中表示的字元。請以 Unicode 格式儲存檔案以防止資料遺失 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/hook/gamehook.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\hook\gamehook.cpp(1347,7): warning C4996: 'stricmp': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _stricmp. See online help for details. [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/hook/gamehook.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\hook\gamehook.cpp(1399,20): warning C4018: '<': signed/unsigned 不相符 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/hook/gamehook.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\hook\gamehook.cpp(1742,1): warning C4819: 檔案含有無法在目前字碼頁 (950) 中表示的字元。請以 Unicode 格式儲存檔案以防止資料遺失 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/hook/gamehook.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\hook\gamehook.cpp(1770,21): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details. [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/hook/gamehook.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\hook\gamehook.cpp(1817,2): warning C4996: 'strncpy': This function or variable may be unsafe. Consider using strncpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details. [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/hook/gamehook.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\hook\gamehook.cpp(1821,2): warning C4996: 'strncpy': This function or variable may be unsafe. Consider using strncpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details. [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/hook/gamehook.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\hook\gamehook.cpp(2092,30): warning C4838: 從 'int' 到 'const char' 的轉換必須是縮小轉換 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/hook/gamehook.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\hook\gamehook.cpp(2092,36): warning C4838: 從 'int' 到 'const char' 的轉換必須是縮小轉換 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/hook/gamehook.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\hook\gamehook.cpp(2102,30): warning C4838: 從 'int' 到 'const char' 的轉換必須是縮小轉換 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/hook/gamehook.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\hook\gamehook.cpp(2102,36): warning C4838: 從 'int' 到 'const char' 的轉換必須是縮小轉換 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/hook/gamehook.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\hook\gamehook.cpp(2047,7): warning C4101: 'szShow': 未參考的區域變數 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/hook/gamehook.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\hook\gamehook.cpp(2125,28): warning C4838: 從 'int' 到 'char' 的轉換必須是縮小轉換 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/hook/gamehook.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\hook\gamehook.cpp(2125,34): warning C4838: 從 'int' 到 'char' 的轉換必須是縮小轉換 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/hook/gamehook.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\hook\gamehook.cpp(2125,40): warning C4838: 從 'int' 到 'char' 的轉換必須是縮小轉換 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/hook/gamehook.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\hook\gamehook.cpp(2125,46): warning C4838: 從 'int' 到 'char' 的轉換必須是縮小轉換 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/hook/gamehook.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\hook\gamehook.cpp(2125,52): warning C4838: 從 'int' 到 'char' 的轉換必須是縮小轉換 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/hook/gamehook.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\hook\gamehook.cpp(2127,26): warning C4838: 從 'int' 到 'char' 的轉換必須是縮小轉換 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/hook/gamehook.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\hook\gamehook.cpp(2127,32): warning C4838: 從 'int' 到 'char' 的轉換必須是縮小轉換 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/hook/gamehook.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\hook\gamehook.cpp(2127,44): warning C4838: 從 'int' 到 'char' 的轉換必須是縮小轉換 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/hook/gamehook.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\hook\gamehook.cpp(2127,50): warning C4838: 從 'int' 到 'char' 的轉換必須是縮小轉換 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/hook/gamehook.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\hook\gamehook.cpp(2153,28): warning C4838: 從 'int' 到 'char' 的轉換必須是縮小轉換 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/hook/gamehook.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\hook\gamehook.cpp(2153,34): warning C4838: 從 'int' 到 'char' 的轉換必須是縮小轉換 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/hook/gamehook.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\hook\gamehook.cpp(2153,40): warning C4838: 從 'int' 到 'char' 的轉換必須是縮小轉換 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/hook/gamehook.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\hook\gamehook.cpp(2153,46): warning C4838: 從 'int' 到 'char' 的轉換必須是縮小轉換 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/hook/gamehook.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\hook\gamehook.cpp(2153,52): warning C4838: 從 'int' 到 'char' 的轉換必須是縮小轉換 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/hook/gamehook.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\hook\gamehook.cpp(2153,58): warning C4838: 從 'int' 到 'char' 的轉換必須是縮小轉換 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/hook/gamehook.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\hook\gamehook.cpp(2153,64): warning C4838: 從 'int' 到 'char' 的轉換必須是縮小轉換 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/hook/gamehook.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\hook\gamehook.cpp(2153,70): warning C4838: 從 'int' 到 'char' 的轉換必須是縮小轉換 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/hook/gamehook.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\hook\gamehook.cpp(2153,76): warning C4838: 從 'int' 到 'char' 的轉換必須是縮小轉換 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/hook/gamehook.cpp')
+  
+  Cipher.cpp
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\hook\Cipher.cpp(1,1): warning C4819: 檔案含有無法在目前字碼頁 (950) 中表示的字元。請以 Unicode 格式儲存檔案以防止資料遺失 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  ShareMemory.cpp
+  HotKeyDialog.cpp
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HotKeyDialog.cpp(88,9): warning C4566: 由通用字元名稱 '\uFFFD' 表示的字元，無法在目前的字碼頁中表示 (950) [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/HotKeyDialog.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HotKeyDialog.cpp(88,9): warning C4566: 由通用字元名稱 '\u03E5' 表示的字元，無法在目前的字碼頁中表示 (950) [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/HotKeyDialog.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HotKeyDialog.cpp(88,9): warning C4566: 由通用字元名稱 '\u05B1' 表示的字元，無法在目前的字碼頁中表示 (950) [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/HotKeyDialog.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HotKeyDialog.cpp(100,8): warning C4566: 由通用字元名稱 '\uFFFD' 表示的字元，無法在目前的字碼頁中表示 (950) [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/HotKeyDialog.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HotKeyDialog.cpp(100,8): warning C4566: 由通用字元名稱 '\u0565' 表示的字元，無法在目前的字碼頁中表示 (950) [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/HotKeyDialog.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HotKeyDialog.cpp(136,9): warning C4566: 由通用字元名稱 '\uFFFD' 表示的字元，無法在目前的字碼頁中表示 (950) [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/HotKeyDialog.cpp')
+  
+  ItemsDialog.cpp
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\ItemsDialog.cpp(52,59): warning C4566: 由通用字元名稱 '\uFFFD' 表示的字元，無法在目前的字碼頁中表示 (950) [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/ItemsDialog.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\ItemsDialog.cpp(52,59): warning C4566: 由通用字元名稱 '\u047E' 表示的字元，無法在目前的字碼頁中表示 (950) [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/ItemsDialog.cpp')
+  
+  MainDialog.cpp
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\MainDialog.cpp(43,45): warning C4566: 由通用字元名稱 '\uFFFD' 表示的字元，無法在目前的字碼頁中表示 (950) [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/MainDialog.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\MainDialog.cpp(44,43): warning C4566: 由通用字元名稱 '\uFFFD' 表示的字元，無法在目前的字碼頁中表示 (950) [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/MainDialog.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\MainDialog.cpp(44,43): warning C4566: 由通用字元名稱 '\u0124' 表示的字元，無法在目前的字碼頁中表示 (950) [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/MainDialog.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\MainDialog.cpp(45,44): warning C4566: 由通用字元名稱 '\uFFFD' 表示的字元，無法在目前的字碼頁中表示 (950) [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/MainDialog.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\MainDialog.cpp(46,44): warning C4566: 由通用字元名稱 '\uFFFD' 表示的字元，無法在目前的字碼頁中表示 (950) [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/MainDialog.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\MainDialog.cpp(47,43): warning C4566: 由通用字元名稱 '\uFFFD' 表示的字元，無法在目前的字碼頁中表示 (950) [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/MainDialog.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\MainDialog.cpp(48,43): warning C4566: 由通用字元名稱 '\uFFFD' 表示的字元，無法在目前的字碼頁中表示 (950) [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/MainDialog.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\MainDialog.cpp(48,43): warning C4566: 由通用字元名稱 '\u06F8' 表示的字元，無法在目前的字碼頁中表示 (950) [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/MainDialog.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\MainDialog.cpp(49,44): warning C4566: 由通用字元名稱 '\uFFFD' 表示的字元，無法在目前的字碼頁中表示 (950) [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/MainDialog.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\MainDialog.cpp(118,17): warning C4566: 由通用字元名稱 '\uFFFD' 表示的字元，無法在目前的字碼頁中表示 (950) [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/MainDialog.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\MainDialog.cpp(122,17): warning C4566: 由通用字元名稱 '\uFFFD' 表示的字元，無法在目前的字碼頁中表示 (950) [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/MainDialog.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\MainDialog.cpp(229,8): warning C4566: 由通用字元名稱 '\uFFFD' 表示的字元，無法在目前的字碼頁中表示 (950) [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/MainDialog.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\MainDialog.cpp(229,8): warning C4566: 由通用字元名稱 '\u01F3' 表示的字元，無法在目前的字碼頁中表示 (950) [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/MainDialog.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\MainDialog.cpp(229,8): warning C4566: 由通用字元名稱 '\u01A8' 表示的字元，無法在目前的字碼頁中表示 (950) [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/MainDialog.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\MainDialog.cpp(240,8): warning C4566: 由通用字元名稱 '\uFFFD' 表示的字元，無法在目前的字碼頁中表示 (950) [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/MainDialog.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\MainDialog.cpp(280,9): warning C4566: 由通用字元名稱 '\uFFFD' 表示的字元，無法在目前的字碼頁中表示 (950) [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/MainDialog.cpp')
+  
+  PageDialog.cpp
+  SpeakDialog.cpp
+  StateDialog.cpp
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\StateDialog.cpp(156,58): warning C4566: 由通用字元名稱 '\uFFFD' 表示的字元，無法在目前的字碼頁中表示 (950) [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/StateDialog.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\StateDialog.cpp(156,58): warning C4566: 由通用字元名稱 '\u02A8' 表示的字元，無法在目前的字碼頁中表示 (950) [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/StateDialog.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\StateDialog.cpp(289,9): warning C4566: 由通用字元名稱 '\uFFFD' 表示的字元，無法在目前的字碼頁中表示 (950) [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/StateDialog.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\StateDialog.cpp(289,9): warning C4566: 由通用字元名稱 '\u03E5' 表示的字元，無法在目前的字碼頁中表示 (950) [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/StateDialog.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\StateDialog.cpp(289,9): warning C4566: 由通用字元名稱 '\u0366' 表示的字元，無法在目前的字碼頁中表示 (950) [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/StateDialog.cpp')
+  
+  StatusDialog.cpp
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\StatusDialog.cpp(87,8): warning C4566: 由通用字元名稱 '\uFFFD' 表示的字元，無法在目前的字碼頁中表示 (950) [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/StatusDialog.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\StatusDialog.cpp(87,8): warning C4566: 由通用字元名稱 '\u027E' 表示的字元，無法在目前的字碼頁中表示 (950) [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/StatusDialog.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\StatusDialog.cpp(110,4): warning C4996: 'strncpy': This function or variable may be unsafe. Consider using strncpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details. [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/StatusDialog.cpp')
+  
+  Util.cpp
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\Util.cpp(26,4): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details. [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/Util.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\Util.cpp(31,4): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details. [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/Util.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\Util.cpp(52,9): warning C4566: 由通用字元名稱 '\uFFFD' 表示的字元，無法在目前的字碼頁中表示 (950) [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/Util.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\Util.cpp(52,9): warning C4566: 由通用字元名稱 '\u0166' 表示的字元，無法在目前的字碼頁中表示 (950) [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/Util.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\Util.cpp(52,9): warning C4566: 由通用字元名稱 '\u046A' 表示的字元，無法在目前的字碼頁中表示 (950) [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/Util.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\Util.cpp(15,2): warning C4996: 'itoa': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _itoa. See online help for details. [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/Util.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\Util.cpp(33,13): warning C4996: 'memicmp': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _memicmp. See online help for details. [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 '/Util.cpp')
+  
+  正在編譯...
+  openssl_compat.cpp
+  AES_TH.cpp
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\CryptoLib\AES_TH.cpp(1,1): warning C4819: 檔案含有無法在目前字碼頁 (950) 中表示的字元。請以 Unicode 格式儲存檔案以防止資料遺失 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\CryptoLib\AES_TH.h(568,1): warning C4819: 檔案含有無法在目前字碼頁 (950) 中表示的字元。請以 Unicode 格式儲存檔案以防止資料遺失 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  (編譯來源檔案 'CryptoLib/AES_TH.cpp')
+  
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\CryptoLib\AES_TH.cpp(316,38): warning C4018: '>=': signed/unsigned 不相符 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\CryptoLib\AES_TH.cpp(327,10): warning C4101: 'block': 未參考的區域變數 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\CryptoLib\AES_TH.cpp(328,10): warning C4101: 'prev_block': 未參考的區域變數 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  adler32.cpp
+  deflate.cpp
+  inflate.cpp
+     正在建立程式庫 D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\Release\LauncherDll.lib 和物件 D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\Release\LauncherDll.exp
+  正在產生程式碼
+  Previous IPDB not found, fall back to full compilation.
+D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\hook\ExceptionReport.cpp(52): warning C4172: 傳回區域變數或暫存 : szFName 的位址 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  All 885 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  已完成程式碼產生
+libeay32.lib(cryptlib.obj) : warning LNK4099: 找不到 PDB 'lib.pdb' (有 'libeay32.lib(cryptlib.obj)' 或位於 'D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\Release\lib.pdb')，當做沒有偵錯資訊，連結物件 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+libeay32.lib(mem.obj) : warning LNK4099: 找不到 PDB 'lib.pdb' (有 'libeay32.lib(mem.obj)' 或位於 'D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\Release\lib.pdb')，當做沒有偵錯資訊，連結物件 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+libeay32.lib(mem_dbg.obj) : warning LNK4099: 找不到 PDB 'lib.pdb' (有 'libeay32.lib(mem_dbg.obj)' 或位於 'D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\Release\lib.pdb')，當做沒有偵錯資訊，連結物件 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+libeay32.lib(ex_data.obj) : warning LNK4099: 找不到 PDB 'lib.pdb' (有 'libeay32.lib(ex_data.obj)' 或位於 'D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\Release\lib.pdb')，當做沒有偵錯資訊，連結物件 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+libeay32.lib(bn_lib.obj) : warning LNK4099: 找不到 PDB 'lib.pdb' (有 'libeay32.lib(bn_lib.obj)' 或位於 'D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\Release\lib.pdb')，當做沒有偵錯資訊，連結物件 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+libeay32.lib(bn_ctx.obj) : warning LNK4099: 找不到 PDB 'lib.pdb' (有 'libeay32.lib(bn_ctx.obj)' 或位於 'D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\Release\lib.pdb')，當做沒有偵錯資訊，連結物件 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+libeay32.lib(bn_print.obj) : warning LNK4099: 找不到 PDB 'lib.pdb' (有 'libeay32.lib(bn_print.obj)' 或位於 'D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\Release\lib.pdb')，當做沒有偵錯資訊，連結物件 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+libeay32.lib(bn_shift.obj) : warning LNK4099: 找不到 PDB 'lib.pdb' (有 'libeay32.lib(bn_shift.obj)' 或位於 'D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\Release\lib.pdb')，當做沒有偵錯資訊，連結物件 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+libeay32.lib(bn_word.obj) : warning LNK4099: 找不到 PDB 'lib.pdb' (有 'libeay32.lib(bn_word.obj)' 或位於 'D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\Release\lib.pdb')，當做沒有偵錯資訊，連結物件 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+libeay32.lib(buffer.obj) : warning LNK4099: 找不到 PDB '' (有 'libeay32.lib(buffer.obj)' 或位於 '')，當做沒有偵錯資訊，連結物件 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+libeay32.lib(bio_lib.obj) : warning LNK4099: 找不到 PDB 'lib.pdb' (有 'libeay32.lib(bio_lib.obj)' 或位於 'D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\Release\lib.pdb')，當做沒有偵錯資訊，連結物件 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+libeay32.lib(bss_file.obj) : warning LNK4099: 找不到 PDB 'lib.pdb' (有 'libeay32.lib(bss_file.obj)' 或位於 'D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\Release\lib.pdb')，當做沒有偵錯資訊，連結物件 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+libeay32.lib(b_print.obj) : warning LNK4099: 找不到 PDB 'lib.pdb' (有 'libeay32.lib(b_print.obj)' 或位於 'D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\Release\lib.pdb')，當做沒有偵錯資訊，連結物件 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+libeay32.lib(stack.obj) : warning LNK4099: 找不到 PDB 'lib.pdb' (有 'libeay32.lib(stack.obj)' 或位於 'D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\Release\lib.pdb')，當做沒有偵錯資訊，連結物件 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+libeay32.lib(lhash.obj) : warning LNK4099: 找不到 PDB 'lib.pdb' (有 'libeay32.lib(lhash.obj)' 或位於 'D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\Release\lib.pdb')，當做沒有偵錯資訊，連結物件 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+libeay32.lib(err.obj) : warning LNK4099: 找不到 PDB 'lib.pdb' (有 'libeay32.lib(err.obj)' 或位於 'D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\Release\lib.pdb')，當做沒有偵錯資訊，連結物件 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+libeay32.lib(obj_dat.obj) : warning LNK4099: 找不到 PDB 'lib.pdb' (有 'libeay32.lib(obj_dat.obj)' 或位於 'D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\Release\lib.pdb')，當做沒有偵錯資訊，連結物件 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+libeay32.lib(obj_lib.obj) : warning LNK4099: 找不到 PDB 'lib.pdb' (有 'libeay32.lib(obj_lib.obj)' 或位於 'D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\Release\lib.pdb')，當做沒有偵錯資訊，連結物件 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+libeay32.lib(a_object.obj) : warning LNK4099: 找不到 PDB 'lib.pdb' (有 'libeay32.lib(a_object.obj)' 或位於 'D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\Release\lib.pdb')，當做沒有偵錯資訊，連結物件 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+libeay32.lib(asn1_lib.obj) : warning LNK4099: 找不到 PDB 'lib.pdb' (有 'libeay32.lib(asn1_lib.obj)' 或位於 'D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\Release\lib.pdb')，當做沒有偵錯資訊，連結物件 [D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\HelpTools.vcxproj]
+  HelpTools.vcxproj -> D:\IntelliJ-workspace\idea_815測試登入器用\LinProject7.6_utf8_title\LinLogin76\LauncherDll\Release\LauncherDll.dll

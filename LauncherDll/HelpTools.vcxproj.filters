@@ -1,0 +1,206 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="help">
+      <UniqueIdentifier>{ca895cec-ce8c-41e2-be22-6355dd709cfd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="hook">
+      <UniqueIdentifier>{30593c15-a617-45d2-a254-3c08d4ba3f50}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common">
+      <UniqueIdentifier>{f314e077-81c9-4fe5-a1e6-8b008b49d5ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CryptoLib">
+      <UniqueIdentifier>{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ReadMe.txt" />
+    <None Include="HelpTools.def">
+      <Filter>源文件</Filter>
+    </None>
+    <None Include="res\HelpTools.rc2">
+      <Filter>资源文件</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="HelpTools.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ChangeDialog.cpp">
+      <Filter>help</Filter>
+    </ClCompile>
+    <ClCompile Include="GameMethods.cpp">
+      <Filter>help</Filter>
+    </ClCompile>
+    <ClCompile Include="GenericDialog.cpp">
+      <Filter>help</Filter>
+    </ClCompile>
+    <ClCompile Include="HotKeyDialog.cpp">
+      <Filter>help</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemsDialog.cpp">
+      <Filter>help</Filter>
+    </ClCompile>
+    <ClCompile Include="MainDialog.cpp">
+      <Filter>help</Filter>
+    </ClCompile>
+    <ClCompile Include="PageDialog.cpp">
+      <Filter>help</Filter>
+    </ClCompile>
+    <ClCompile Include="SpeakDialog.cpp">
+      <Filter>help</Filter>
+    </ClCompile>
+    <ClCompile Include="StateDialog.cpp">
+      <Filter>help</Filter>
+    </ClCompile>
+    <ClCompile Include="StatusDialog.cpp">
+      <Filter>help</Filter>
+    </ClCompile>
+    <ClCompile Include="Util.cpp">
+      <Filter>help</Filter>
+    </ClCompile>
+    <ClCompile Include="hook\gamehook.cpp">
+      <Filter>hook</Filter>
+    </ClCompile>
+    <ClCompile Include="hook\Cipher.cpp">
+      <Filter>hook</Filter>
+    </ClCompile>
+    <ClCompile Include="hook\aes.cpp">
+      <Filter>hook</Filter>
+    </ClCompile>
+    <ClCompile Include="hook\configenc.cpp">
+      <Filter>hook</Filter>
+    </ClCompile>
+    <ClCompile Include="hook\encdec.cpp">
+      <Filter>hook</Filter>
+    </ClCompile>
+    <ClCompile Include="hook\ShareMemory.cpp">
+      <Filter>hook</Filter>
+    </ClCompile>
+    <ClCompile Include="hook\ExceptionReport.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="CryptoLib\AES_TH.cpp">
+      <Filter>CryptoLib</Filter>
+    </ClCompile>
+    <ClCompile Include="hook\rc6.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="openssl_compat.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Hash\adler32.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\zlib-1.1.3\deflate.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\zlib-1.1.3\inflate.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\zlib-1.1.3\zip.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="HelpTools.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="dllimport.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Util.h">
+      <Filter>help</Filter>
+    </ClInclude>
+    <ClInclude Include="StatusDialog.h">
+      <Filter>help</Filter>
+    </ClInclude>
+    <ClInclude Include="StateDialog.h">
+      <Filter>help</Filter>
+    </ClInclude>
+    <ClInclude Include="SpeakDialog.h">
+      <Filter>help</Filter>
+    </ClInclude>
+    <ClInclude Include="PageDialog.h">
+      <Filter>help</Filter>
+    </ClInclude>
+    <ClInclude Include="MainDialog.h">
+      <Filter>help</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemsDialog.h">
+      <Filter>help</Filter>
+    </ClInclude>
+    <ClInclude Include="HotKeyDialog.h">
+      <Filter>help</Filter>
+    </ClInclude>
+    <ClInclude Include="GenericDialog.h">
+      <Filter>help</Filter>
+    </ClInclude>
+    <ClInclude Include="ChangeDialog.h">
+      <Filter>help</Filter>
+    </ClInclude>
+    <ClInclude Include="GameMethods.h">
+      <Filter>help</Filter>
+    </ClInclude>
+    <ClInclude Include="hook\gamehook.h">
+      <Filter>hook</Filter>
+    </ClInclude>
+    <ClInclude Include="Projectdef.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\zlib\zlib.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="hook\aes.h">
+      <Filter>hook</Filter>
+    </ClInclude>
+    <ClInclude Include="hook\configenc.h">
+      <Filter>hook</Filter>
+    </ClInclude>
+    <ClInclude Include="hook\encdec.h">
+      <Filter>hook</Filter>
+    </ClInclude>
+    <ClInclude Include="hook\ShareMemory.h">
+      <Filter>hook</Filter>
+    </ClInclude>
+    <ClInclude Include="hook\ExceptionReport.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="hook\Cipher.h">
+      <Filter>hook</Filter>
+    </ClInclude>
+    <ClInclude Include="CryptoLib\AES_TH.h">
+      <Filter>CryptoLib</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="HelpTools.rc">
+      <Filter>资源文件</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>

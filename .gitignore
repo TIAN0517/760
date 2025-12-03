@@ -1,0 +1,18 @@
+# Visual Studio Project Files to Ignore (忽略所有超大檔案和快取)
+
+# Visual Studio 檔案夾 (包含 .ipch 等)
+.vs/
+
+# 編譯中產生的大型檔案
+*.sdf
+*.bak
+
+# 編譯產物
+Debug/
+Release/
+*.dll
+*.obj
+
+# 其他暫存檔案
+skin.rar
+jartmp*.tmp
